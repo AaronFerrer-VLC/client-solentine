@@ -1,0 +1,100 @@
+.Navigation .search-icon {
+    color: white
+}
+
+.Navigation .btn:hover .search-icon {
+    color: black
+}
+
+.Navigation .navbar {
+    background-color: #EBE0D5;
+    z-index: 1050;
+}
+
+.Navigation .navbar .nav-link:hover,
+.Navigation .dropdown-toggle:hover {
+    color: black !important
+}
+
+.Navigation .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.Navigation .navbar-nav {
+    flex-direction: row;
+}
+
+.offcanvas.offcanvas-start {
+    position: fixed;
+    top: 60px;
+}
+
+.offcanvas {
+    background-color: red;
+    z-index: 3000;
+}
+
+.offcanvas-body {
+    background-color: #141426 !important;
+    padding: 0;
+}
+
+.offcanvas .row:hover {
+    background-color: #060613;
+}
+
+.offcanvas .offcanvas-login:hover {
+    background-color: transparent;
+}
+
+.offcanvas .btn:hover {
+    background-color: transparent;
+    color: white
+}
+
+.accordion-menu {
+    background: #060613
+}
+
+.accordion-header .accordion-button:focus {
+    box-shadow: none;
+    background: #060613;
+    color: white !important
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: var(--bs-accordion-btn-icon) !important
+}
+
+.accordion-item,
+.accordion-button {
+    background-color: transparent;
+    color: white;
+    font-size: bold;
+}
+
+.dropdown-menu {
+    background-color: #141426;
+}
+
+.dropdown-item {
+    font-size: 0.9rem;
+}
+
+
+.dropdown-item:hover {
+    background-color: #060613;
+}
+
+.offcanvas a {
+    text-decoration: none;
+    color: white;
+}
+
+.offcanvas hr {
+    margin: 0
+}
+
+.profile-toggle::after {
+    display: none;
+}

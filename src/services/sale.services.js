@@ -23,7 +23,7 @@ class SaleServices {
         return this.axiosApp.get(`/${id}`)
     }
 
-    getCommunities() {
+    getAllSales() {
         return this.axiosApp.get(`/`)
     }
 

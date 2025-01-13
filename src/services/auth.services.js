@@ -1,41 +1,65 @@
-import axios from 'axios'
+import axios from 'axios';
 
 class AuthServices {
-
     constructor() {
-
         this.axiosApp = axios.create({
-            baseURL: `${import.meta.env.VITE_APP_API_URL}/api`
-
-        })
+            baseURL: `${import.meta.env.VITE_APP_API_URL}/api/auth`
+        });
 
         this.axiosApp.interceptors.request.use(config => {
-
-            const storedToken = localStorage.getItem('authToken')
-
+            const storedToken = localStorage.getItem('authToken');
             if (storedToken) {
-                config.headers = { Authorization: `Bearer ${storedToken}` }
+                config.headers.Authorization = `Bearer ${storedToken}`;
             }
+            return config;
+        });
 
-            return config
-        })
-    }
-
-    signupUser(userData) {
-        return this.axiosApp.post('/signup', userData)
-    }
-
-    loginUser(userData) {
-        return this.axiosApp.post('/login', userData)
-    }
-
-    verifyUser(token) {
-        return this.axiosApp.get('/verify', {
-            headers: {
-                Authorization: `Bearer ${token}`
+        this.axiosApp.interceptors.response.use(
+            response => response,
+            error => {
+                if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                    console.error("Error de autenticación. El token puede haber expirado.");
+                    localStorage.removeItem('authToken');
+                    window.location.reload();
+                }
+                return Promise.reject(error);
             }
-        })
+        );
+    }
+
+    async signupUser(userData) {
+        try {
+            const response = await this.axiosApp.post('/signup', userData);
+            return response;
+        } catch (error) {
+            console.error("Error al registrar usuario:", error.response || error);
+            throw error;
+        }
+    }
+
+    async loginUser(userData) {
+        try {
+            const response = await this.axiosApp.post('/login', userData);
+            return response;
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error.response || error);
+            throw error;
+        }
+    }
+
+    async verifyUser(token) {
+        try {
+            const response = await this.axiosApp.get('/verify', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response;
+        } catch (error) {
+            console.error("Error al verificar el usuario:", error.response || error);
+            throw error;
+        }
     }
 }
 
-export default new AuthServices()
+export default new AuthServices();

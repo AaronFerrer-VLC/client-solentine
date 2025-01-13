@@ -1,3 +1,5 @@
+import { travolta } from "../../const/image-path"
+
 const Error404Page = () => {
     return (
         <div className="Error404Page" style={{ textAlign: 'center', padding: '50px' }}>

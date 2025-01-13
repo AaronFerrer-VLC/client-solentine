@@ -27,10 +27,10 @@ const LoginForm = () => {
             .loginUser(loginData)
             .then(({ data }) => {
 
-                const { authToken, _id } = data
+                const { authToken, userId } = data
 
                 localStorage.setItem('authToken', authToken)
-                localStorage.setItem('userId', _id)
+                localStorage.setItem('userId', userId)
 
                 authenticateUser()
             })

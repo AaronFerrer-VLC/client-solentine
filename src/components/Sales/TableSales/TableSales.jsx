@@ -1,47 +1,80 @@
-import React from 'react'
-import Table from 'react-bootstrap/Table'
+import React, { useState } from 'react';
+import { Table, Button } from 'react-bootstrap';
+import Loader from '../../Loader/Loader';
 
-const TableSales = ({ datos }) => {
+const TableSales = ({ sales, onSortChange, onEditClick, onDeleteClick }) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSort = (key, direction) => {
+        onSortChange(key, direction);
+    };
+
     return (
-        <Table striped bordered hover>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Día</th>
-                    <th>Mes</th>
-                    <th>Año</th>
-                    <th>Fecha</th>
-                    <th>Negocio</th>
-                    <th>Zona</th>
-                    <th>Marca</th>
-                    <th>Cliente</th>
-                    <th>Importe</th>
-                </tr>
-            </thead>
-            <tbody>
-                {Array.isArray(datos) && datos.length > 0 ? ( // Validar que datos sea un array
-                    datos.map((dato, index) => (
-                        <tr key={dato._id}>
-                            <td>{index + 1}</td>
-                            <td>{dato.Día}</td>
-                            <td>{dato.Mes}</td>
-                            <td>{dato.Año}</td>
-                            <td>{dato.Fecha}</td>
-                            <td>{dato.Negocio}</td>
-                            <td>{dato.Zona}</td>
-                            <td>{dato.Marca}</td>
-                            <td>{dato.Cliente}</td>
-                            <td>{dato.Importe}</td>
+        isLoading ? <Loader /> :
+            <div className='TableSales'>
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>
+                                ID
+                                <Button variant="link" disabled={isLoading} onClick={() => handleSort('Id', 'asc')}>↑</Button>
+                                <Button variant="link" disabled={isLoading} onClick={() => handleSort('Id', 'desc')}>↓</Button>
+                            </th>
+                            <th>
+                                Fecha
+                                <Button variant="link" disabled={isLoading} onClick={() => handleSort('Fecha', 'asc')}>↑</Button>
+                                <Button variant="link" disabled={isLoading} onClick={() => handleSort('Fecha', 'desc')}>↓</Button>
+                            </th>
+                            <th>Negocio</th>
+                            <th>Zona</th>
+                            <th>Marca</th>
+                            <th>Cliente</th>
+                            <th>
+                                Importe
+                                <Button variant="link" disabled={isLoading} onClick={() => handleSort('Importe', 'asc')}>↑</Button>
+                                <Button variant="link" disabled={isLoading} onClick={() => handleSort('Importe', 'desc')}>↓</Button>
+                            </th>
+                            <th>Comercial</th>
+                            <th>Acciones</th>
                         </tr>
-                    ))
-                ) : (
-                    <tr>
-                        <td colSpan="10">No hay datos disponibles</td>
-                    </tr>
-                )}
-            </tbody>
-        </Table>
-    )
-}
+                    </thead>
+                    <tbody>
+                        {sales.map((sale) => (
+                            <tr key={sale._id}>
+                                <td>{sale.Id}</td>
+                                <td>{sale.Fecha}</td>
+                                <td>{sale.Negocio}</td>
+                                <td>{sale.Zona}</td>
+                                <td>{sale.Marca}</td>
+                                <td>{sale.Cliente}</td>
+                                <td>{sale.Importe}</td>
+                                <td>{sale.Comercial}</td>
+                                <td>
+                                    {onEditClick && (
+                                        <Button
+                                            variant="warning"
+                                            onClick={() => onEditClick(sale)}
+                                        >
+                                            Editar
+                                        </Button>
+                                    )}
+                                    {onDeleteClick && (
+                                        <Button
+                                            variant="danger"
+                                            className="ms-2"
+                                            onClick={() => onDeleteClick(sale)}
+                                        >
+                                            Eliminar
+                                        </Button>
+                                    )}
+                                </td>
 
-export default TableSales
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </div>
+    );
+};
+
+export default TableSales;

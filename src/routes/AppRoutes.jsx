@@ -4,7 +4,9 @@ import LoginPage from '../pages/LoginPage/LoginPage'
 import HomePage from '../pages/HomePage/HomePage'
 import Error404Page from '../pages/ErrorPage404Page/Error404Page'
 import SalesPage from '../pages/Sales/SalesPage/SalesPage'
-
+import UserProfilePage from '../pages/UserPage/UserProfilePage/UserProfilePage'
+import ClientPage from '../pages/ClientPage/ClientPage'
+import UsersPage from '../pages/UserPage/UserProfilePage/UsersPage/UsersPage'
 const AppRoutes = () => {
     return (
         <div className="AppRoutes">
@@ -13,7 +15,12 @@ const AppRoutes = () => {
 
                 <Route path={'/registro'} element={<SignupPage />} />
                 <Route path={'/inicio-sesion'} element={<LoginPage />} />
+
+                <Route path={'/usuarios/:id'} element={<UserProfilePage />} />
+                <Route path={'/usuarios'} element={<UsersPage />} />
+
                 <Route path={'/ventas'} element={<SalesPage />} />
+                <Route path={'/clientes'} element={<ClientPage />} />
 
                 <Route path={'/*'} element={<Error404Page />} />
             </Routes>

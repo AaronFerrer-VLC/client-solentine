@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Modal, Form, Spinner, Row, Col, ListGroup, Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import saleServices from '../../../services/sale.services'
+import userServices from '../../../services/user.services'
 import debounce from 'lodash.debounce'
 
 
 const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
     const [searchValue, setSearchValue] = useState('')
     const [results, setResults] = useState({
-        communities: [],
+        sales: [],
         users: [],
-        reviews: [],
+        clients: [],
+        comercials: [],
     });
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
@@ -22,9 +24,9 @@ const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
             saleServices.filterCommunities(searchValue),
             userServices.filterUsers(searchValue),
         ])
-            .then(([communityResults, userResults,]) => {
+            .then(([saleResults, userResults,]) => {
                 setResults({
-                    communities: communityResults.data,
+                    sales: saleResults.data,
                     users: userResults.data,
                 })
             })
@@ -44,14 +46,14 @@ const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
     }
 
     const handleClick = (type, id) => {
-        if (type === 'community') navigate(`/sales/detalles/${id}`)
+        if (type === 'sale') navigate(`/sales/detalles/${id}`)
         if (type === 'user') navigate(`/usuarios/${id}`)
         setShowFilter(false)
     }
 
     const getHighlightedResult = () => {
-        const { communities, users } = results
-        if (communities.length > 0) return { type: 'sale', data: sales[0] }
+        const { sales, users } = results
+        if (sales.length > 0) return { type: 'sale', data: sales[0] }
         if (users.length > 0) return { type: 'user', data: users[0] }
         return null
     }
@@ -68,7 +70,7 @@ const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
                 <Form>
                     <Form.Control
                         type="text"
-                        placeholder="Buscar comunidades, usuarios o reseñas..."
+                        placeholder="Buscar ventas, usuarios o clientes..."
                         value={searchValue}
                         onChange={handleSearchChange}
                     />
@@ -87,16 +89,10 @@ const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
                                     }
                                     style={{ cursor: 'pointer' }}
                                 >
-                                    {highlightedResult.type === 'community' && (
+                                    {highlightedResult.type === 'sale' && (
                                         <div>
-                                            <img
-                                                src={highlightedResult.data.cover}
-                                                alt={highlightedResult.data.title}
-                                                width="100%"
-                                                className="mb-2"
-                                            />
-                                            <h6>{highlightedResult.data.title}</h6>
-                                            <p>{highlightedResult.data.description}</p>
+                                            <h6>{highlightedResult.data.fecha}</h6>
+                                            <p>{highlightedResult.data.importe}</p>
                                         </div>
                                     )}
                                     {highlightedResult.type === 'user' && (
@@ -108,10 +104,10 @@ const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
                                                 className="mb-2"
                                             />
                                             <h6>{highlightedResult.data.username}</h6>
-                                            <p>{highlightedResult.data.bio}</p>
+                                            <p>{highlightedResult.data.sale}</p>
                                         </div>
                                     )}
-                                    {highlightedResult.type === 'review' && (
+                                    {highlightedResult.type === 'client' && (
                                         <div>
                                             <h6>{highlightedResult.data.content}</h6>
                                         </div>
@@ -122,16 +118,16 @@ const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
                         <Col md={6}>
                             <h5>Otros resultados</h5>
                             <ListGroup>
-                                {results.communities.length > 0 && (
+                                {results.sales.length > 0 && (
                                     <div>
-                                        <h6>Comunidades</h6>
-                                        {results.communities.slice(1).map((community) => (
+                                        <h6>Ventas</h6>
+                                        {results.sales.slice(1).map((sale) => (
                                             <ListGroup.Item
-                                                key={community._id}
+                                                key={sale._id}
                                                 action
-                                                onClick={() => handleClick('community', community._id)}
+                                                onClick={() => handleClick('sale', sale._id)}
                                             >
-                                                {community.title}
+                                                {sale.fecha}
                                             </ListGroup.Item>
                                         ))}
                                     </div>
@@ -150,20 +146,20 @@ const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
                                         ))}
                                     </div>
                                 )}
-                                {results.reviews.length > 0 && (
+                                {/* {results.reviews.length > 0 && (
                                     <div>
-                                        <h6>Reseñas</h6>
-                                        {results.reviews.slice(1).map((review) => (
+                                        <h6>Clientes</h6>
+                                        {results.clients.slice(1).map((client) => (
                                             <ListGroup.Item
-                                                key={review._id}
+                                                key={client._id}
                                                 action
-                                                onClick={() => handleClick('review', review._id)}
+                                                onClick={() => handleClick('client', client._id)}
                                             >
-                                                {review.content}
+                                                {client.name}
                                             </ListGroup.Item>
                                         ))}
                                     </div>
-                                )}
+                                )} */}
                             </ListGroup>
                         </Col>
                     </Row>

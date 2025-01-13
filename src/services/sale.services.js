@@ -7,36 +7,29 @@ class SaleServices {
         })
 
         this.axiosApp.interceptors.request.use(config => {
-
             const storedToken = localStorage.getItem('authToken')
-
             if (storedToken) {
-                config.headers = { Authorization: `Bearer ${storedToken}` }
+                config.headers.Authorization = `Bearer ${storedToken}`
             }
-
             return config
-
         })
     }
 
-    getOneSale(id) {
-        return this.axiosApp.get(`/${id}`)
+    getAllSales(page, limit, filters, sortOrder) {
+        return this.axiosApp.get('/', {
+            params: { page, limit, ...filters, sortOrder }
+        })
     }
 
-    getAllSales() {
-        return this.axiosApp.get(`/`)
+    filterSales(filters, sortOrder, page, limit) {
+        return this.axiosApp.get('/filter', {
+            params: { ...filters, sortOrder, page, limit }
+        })
     }
 
-
-    filterSales = (query) => {
-        return this.axiosApp.get(`/search/${query}`)
-    }
-
-
-    saveSale(saleData) {
+    createSale(saleData) {
         return this.axiosApp.post('/', saleData)
     }
-
 
     editSale(id, saleData) {
         return this.axiosApp.put(`/${id}`, saleData)
@@ -45,7 +38,6 @@ class SaleServices {
     deleteSale(id) {
         return this.axiosApp.delete(`/${id}`)
     }
-
 }
 
 export default new SaleServices()

@@ -1,0 +1,8 @@
+.UserCard .card {
+    background-color: #242432;
+}
+
+.UserCard span,
+p {
+    font-size: 0.75rem;
+}

@@ -4,14 +4,14 @@ class ClientServices {
     constructor() {
         this.axiosApp = axios.create({
             baseURL: `${import.meta.env.VITE_APP_API_URL}/api/clients`
-        });
+        })
 
         this.axiosApp.interceptors.request.use(config => {
             const storedToken = localStorage.getItem('authToken');
             if (storedToken) {
-                config.headers.Authorization = `Bearer ${storedToken}`;
+                config.headers.Authorization = `Bearer ${storedToken}`
             }
-            return config;
+            return config
         });
     }
 

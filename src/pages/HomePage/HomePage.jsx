@@ -60,7 +60,7 @@ const HomePage = () => {
                         <Card.Body>
                             <Card.Title>Ventas</Card.Title>
                             <Card.Text>Gestiona y visualiza todas tus ventas de manera eficiente.</Card.Text>
-                            <Button variant="primary" href="/ventas">Ver Ventas</Button>
+                            <Button variant="primary" as={Link} to="/ventas">Ver Ventas</Button>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -69,7 +69,7 @@ const HomePage = () => {
                         <Card.Body>
                             <Card.Title>Clientes</Card.Title>
                             <Card.Text>Administra tus clientes y mantén toda su información actualizada.</Card.Text>
-                            <Button variant="primary" href="/clientes">Ver Clientes</Button>
+                            <Button variant="primary" as={Link} to="/clientes">Ver Clientes</Button>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -78,7 +78,7 @@ const HomePage = () => {
                         <Card.Body>
                             <Card.Title>Comerciales</Card.Title>
                             <Card.Text>Gestiona a tus comerciales y optimiza su rendimiento.</Card.Text>
-                            <Button variant="primary" href="/comerciales">Ver Comerciales</Button>
+                            <Button variant="primary" as={Link} to="/comerciales">Ver Comerciales</Button>
                         </Card.Body>
                     </Card>
                 </Col>

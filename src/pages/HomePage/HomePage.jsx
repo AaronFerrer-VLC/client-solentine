@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Card, Spinner, Link } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { Link } from 'react-router-dom'
 import './HomePage.css';
 import clientServices from '../../services/client.services';
 import comercialServices from '../../services/comercial.services';

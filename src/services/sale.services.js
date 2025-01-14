@@ -16,15 +16,29 @@ class SaleServices {
     }
 
     getAllSales(page, limit, filters, sortOrder) {
-        return this.axiosApp.get('/', {
-            params: { page, limit, ...filters, sortOrder }
-        })
+        const query = {
+            page,
+            limit,
+            ...filters,
+            sortKey: sortOrder.key,
+            sortDirection: sortOrder.direction
+        };
+        return this.axiosApp.get('/', { params: query });
+    }
+
+    getAllSalesForHomePage() {
+        return this.axiosApp.get('/all')
     }
 
     filterSales(filters, sortOrder, page, limit) {
-        return this.axiosApp.get('/filter', {
-            params: { ...filters, sortOrder, page, limit }
-        })
+        const query = {
+            ...filters,
+            sortKey: sortOrder.key,
+            sortDirection: sortOrder.direction,
+            page,
+            limit
+        };
+        return this.axiosApp.get('/filter', { params: query });
     }
 
     createSale(saleData) {

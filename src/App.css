@@ -1,8 +1,8 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #060613 !important;
-  color: white !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
 }
 
 .container {
@@ -28,5 +28,22 @@ body {
 }
 
 .modal-content {
-  background-color: #060613 !important;
+  background-color: #EBE0D5 !important;
+  color: #000000 !important;
+}
+
+.modal-header,
+.modal-footer {
+  background-color: #EBE0D5 !important;
+  color: #000000 !important;
+}
+
+.modal-title {
+  color: #000000 !important;
+}
+
+.card {
+  border-radius: 10px !important;
+  background-color: #EBE0D5 !important;
+  color: #000000 !important;
 }

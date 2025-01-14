@@ -72,10 +72,10 @@ const FiltersSale = ({ onChange, onClear }) => {
                         <Form.Label>Comercial</Form.Label>
                         <Form.Control name="comercial" value={filters.comercial} onChange={handleChange} placeholder="Comercial" />
                     </Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button className="mt-2" variant="primary" type="submit">
                         Aplicar Filtros
                     </Button>
-                    <Button variant="secondary" type="button" onClick={handleClear}>
+                    <Button className="mt-2 ms-2" variant="secondary" type="button" onClick={handleClear}>
                         Limpiar Filtros
                     </Button>
                 </Form>

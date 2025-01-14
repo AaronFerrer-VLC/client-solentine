@@ -1,172 +1,134 @@
-import React, { useState, useEffect } from 'react'
-import { Modal, Form, Spinner, Row, Col, ListGroup, Button } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
-import saleServices from '../../../services/sale.services'
-import userServices from '../../../services/user.services'
-import debounce from 'lodash.debounce'
+import React, { useState, useEffect } from 'react';
+import { Form, Row, Col, Spinner } from 'react-bootstrap';
+import saleServices from '../../../services/sale.services';
+import userServices from '../../../services/user.services';
 
-
-const GeneralFilter = ({ onResultsFound, setShowFilter }) => {
-    const [searchValue, setSearchValue] = useState('')
-    const [results, setResults] = useState({
-        sales: [],
-        users: [],
-        clients: [],
-        comercials: [],
-    });
-    const [isLoading, setIsLoading] = useState(false)
-    const navigate = useNavigate()
-
-
-    const fetchData = debounce(() => {
-        setIsLoading(true);
-        Promise.all([
-            saleServices.filterCommunities(searchValue),
-            userServices.filterUsers(searchValue),
-        ])
-            .then(([saleResults, userResults,]) => {
-                setResults({
-                    sales: saleResults.data,
-                    users: userResults.data,
-                })
-            })
-            .catch((err) => console.error(err))
-            .finally(() => setIsLoading(false))
-    }, 300)
+const GeneralFilter = ({ onResultClick }) => {
+    const [searchValue, setSearchValue] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [results, setResults] = useState([]);
+    const [highlightedResult, setHighlightedResult] = useState(null);
 
     useEffect(() => {
-        if (searchValue.length >= 3) {
-            fetchData()
+        if (searchValue) {
+            handleSearch();
+        } else {
+            setResults([]);
+            setHighlightedResult(null);
         }
-        return fetchData.cancel
-    }, [searchValue])
+    }, [searchValue]);
 
     const handleSearchChange = (e) => {
-        setSearchValue(e.target.value)
-    }
+        setSearchValue(e.target.value);
+    };
+
+    const handleSearch = async () => {
+        setIsLoading(true);
+        try {
+            const [salesResponse, usersResponse] = await Promise.all([
+                saleServices.filterSales({ client: searchValue, comercial: searchValue, zone: searchValue, business: searchValue }, { key: 'Fecha', direction: 'asc' }, 1, 10),
+                userServices.filterUsers(searchValue)
+            ]);
+
+            const sales = salesResponse.data.sales.map(sale => ({ type: 'sale', data: sale }));
+            const users = usersResponse.data.users.map(user => ({ type: 'user', data: user }));
+
+            const combinedResults = [...sales, ...users];
+            setResults(combinedResults);
+
+            if (combinedResults.length > 0) {
+                setHighlightedResult(combinedResults[0]);
+            } else {
+                setHighlightedResult(null);
+            }
+        } catch (error) {
+            console.error('Error al realizar la búsqueda:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleClick = (type, id) => {
-        if (type === 'sale') navigate(`/sales/detalles/${id}`)
-        if (type === 'user') navigate(`/usuarios/${id}`)
-        setShowFilter(false)
-    }
-
-    const getHighlightedResult = () => {
-        const { sales, users } = results
-        if (sales.length > 0) return { type: 'sale', data: sales[0] }
-        if (users.length > 0) return { type: 'user', data: users[0] }
-        return null
-    }
-
-
-    const highlightedResult = getHighlightedResult()
+        onResultClick(type, id);
+    };
 
     return (
-        <Modal show={true} onHide={() => setShowFilter(false)} centered size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title>Buscar</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <Form.Control
-                        type="text"
-                        placeholder="Buscar ventas, usuarios o clientes..."
-                        value={searchValue}
-                        onChange={handleSearchChange}
-                    />
-                </Form>
-                {isLoading ? (
-                    <Spinner animation="border" className="mt-3" />
-                ) : (
-                    <Row className="mt-3">
-                        {highlightedResult && (
-                            <Col md={6}>
-                                <h5>Resultado destacado</h5>
-                                <div
-                                    className="highlighted-result"
-                                    onClick={() =>
-                                        handleClick(highlightedResult.type, highlightedResult.data._id)
-                                    }
-                                    style={{ cursor: 'pointer' }}
-                                >
-                                    {highlightedResult.type === 'sale' && (
-                                        <div>
-                                            <h6>{highlightedResult.data.fecha}</h6>
-                                            <p>{highlightedResult.data.importe}</p>
-                                        </div>
-                                    )}
-                                    {highlightedResult.type === 'user' && (
-                                        <div>
-                                            <img
-                                                src={highlightedResult.data.avatar || 'default-avatar.png'}
-                                                alt={highlightedResult.data.username}
-                                                width="100%"
-                                                className="mb-2"
-                                            />
-                                            <h6>{highlightedResult.data.username}</h6>
-                                            <p>{highlightedResult.data.sale}</p>
-                                        </div>
-                                    )}
-                                    {highlightedResult.type === 'client' && (
-                                        <div>
-                                            <h6>{highlightedResult.data.content}</h6>
-                                        </div>
-                                    )}
-                                </div>
-                            </Col>
-                        )}
+        <div className="GeneralFilter">
+            <Form>
+                <Form.Control
+                    type="text"
+                    placeholder="Buscar ventas, usuarios o clientes..."
+                    value={searchValue}
+                    onChange={handleSearchChange}
+                />
+            </Form>
+            {isLoading ? (
+                <Spinner animation="border" className="mt-3" />
+            ) : (
+                <Row className="mt-3">
+                    {highlightedResult && (
                         <Col md={6}>
-                            <h5>Otros resultados</h5>
-                            <ListGroup>
-                                {results.sales.length > 0 && (
+                            <h5>Resultado destacado</h5>
+                            <div
+                                className="highlighted-result"
+                                onClick={() => handleClick(highlightedResult.type, highlightedResult.data._id)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                {highlightedResult.type === 'sale' && (
                                     <div>
-                                        <h6>Ventas</h6>
-                                        {results.sales.slice(1).map((sale) => (
-                                            <ListGroup.Item
-                                                key={sale._id}
-                                                action
-                                                onClick={() => handleClick('sale', sale._id)}
-                                            >
-                                                {sale.fecha}
-                                            </ListGroup.Item>
-                                        ))}
+                                        <h6>{highlightedResult.data.Fecha}</h6>
+                                        <p>{highlightedResult.data.Importe}</p>
                                     </div>
                                 )}
-                                {results.users.length > 0 && (
+                                {highlightedResult.type === 'user' && (
                                     <div>
-                                        <h6>Usuarios</h6>
-                                        {results.users.slice(1).map((user) => (
-                                            <ListGroup.Item
-                                                key={user._id}
-                                                action
-                                                onClick={() => handleClick('user', user._id)}
-                                            >
-                                                {user.username}
-                                            </ListGroup.Item>
-                                        ))}
+                                        <img
+                                            src={highlightedResult.data.avatar || 'default-avatar.png'}
+                                            alt={highlightedResult.data.username}
+                                            width="100%"
+                                            className="mb-2"
+                                        />
+                                        <h6>{highlightedResult.data.username}</h6>
+                                        <p>{highlightedResult.data.email}</p>
                                     </div>
                                 )}
-                                {/* {results.reviews.length > 0 && (
-                                    <div>
-                                        <h6>Clientes</h6>
-                                        {results.clients.slice(1).map((client) => (
-                                            <ListGroup.Item
-                                                key={client._id}
-                                                action
-                                                onClick={() => handleClick('client', client._id)}
-                                            >
-                                                {client.name}
-                                            </ListGroup.Item>
-                                        ))}
-                                    </div>
-                                )} */}
-                            </ListGroup>
+                            </div>
                         </Col>
-                    </Row>
-                )}
-            </Modal.Body>
-        </Modal>
-    );
+                    )}
+                    <Col md={6}>
+                        <h5>Resultados</h5>
+                        {results.map((result, index) => (
+                            <div
+                                key={index}
+                                className="result-item"
+                                onClick={() => handleClick(result.type, result.data._id)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                {result.type === 'sale' && (
+                                    <div>
+                                        <h6>{result.data.Fecha}</h6>
+                                        <p>{result.data.Importe}</p>
+                                    </div>
+                                )}
+                                {result.type === 'user' && (
+                                    <div>
+                                        <img
+                                            src={result.data.avatar || 'default-avatar.png'}
+                                            alt={result.data.username}
+                                            width="100%"
+                                            className="mb-2"
+                                        />
+                                        <h6>{result.data.username}</h6>
+                                        <p>{result.data.email}</p>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </Col>
+                </Row>
+            )}
+        </div>
+    )
 }
 
 export default GeneralFilter

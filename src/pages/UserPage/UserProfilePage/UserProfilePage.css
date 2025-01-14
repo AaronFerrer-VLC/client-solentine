@@ -1,5 +1,27 @@
-.UserProfilePage .reviews-list {
-    overflow-y: auto;
-    display: flex;
-    flex-wrap: nowrap;
+.UserProfilePage {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding-top: 20px;
+}
+
+.UserProfilePage .card {
+    background-color: #EBE0D5;
+    border: none;
+    border-radius: 8px;
+}
+
+.UserProfilePage .btn-style-1 {
+    color: black
+}
+
+.UserProfilePage .btn-style-1:hover {
+    color: white
+}
+
+.UserProfilePage .text-danger {
+    color: black !important
+}
+
+.UserProfilePage .text-danger:hover {
+    color: white !important
 }

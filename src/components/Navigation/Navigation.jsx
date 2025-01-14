@@ -1,17 +1,16 @@
-import { Container, Nav, Navbar, Button, Dropdown, Offcanvas, Row, Col, Accordion } from 'react-bootstrap';
-import { Search, List, XLg } from "react-bootstrap-icons";
-import { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../contexts/auth.context';
-import { homer, logo } from '../../const/image-path';
-import GeneralFilter from '../Filters/GeneralFilter/GeneralFilter';
+import { Container, Nav, Navbar, Button, Dropdown, Offcanvas, Row, Col, Accordion } from 'react-bootstrap'
+import { Search, List, XLg } from "react-bootstrap-icons"
+import { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../contexts/auth.context'
+import { homer, logo } from '../../const/image-path'
+import GeneralFilter from '../Filters/GeneralFilter/GeneralFilter'
 
 import './Navigation.css';
 
 const Navigation = () => {
     const { loggedUser, logoutUser } = useContext(AuthContext);
     const navigate = useNavigate();
-    console.log('Viene la información del logueado:', loggedUser);
     const [clickToggle, setClickToggle] = useState(false);
     const [showOffCanvas, setShowOffCanvas] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
@@ -111,7 +110,7 @@ const Navigation = () => {
                         !loggedUser ? (
                             <Row className="offcanvas-login text-center p-3">
                                 <Col>
-                                    <Button className="btn-style-2 signup-btn border-0 fw-bold me-3 w-100" as={Link} to="/registro" onClick={() => setShowOffCanvas(false)}>REGISTRARSE</Button>
+                                    <Button variant="outline-light" className="w-100 fw-bold mt-3" as={Link} to="/registro" onClick={() => setShowOffCanvas(false)}>REGISTRARSE</Button>
                                     <Button variant="outline-light" className="w-100 fw-bold mt-3" as={Link} to="/inicio-sesion" onClick={() => setShowOffCanvas(false)}>INICIAR SESIÓN</Button>
                                 </Col>
                             </Row>
@@ -174,7 +173,7 @@ const Navigation = () => {
                     <Row className="accordion-menu">
                         <Col>
                             <Accordion flush>
-                                <Accordion.Item eventKey="0" style={{ backgroundColor: "#141426" }}>
+                                <Accordion.Item eventKey="0">
                                     <Accordion.Header><span className="fw-bold text-white">Reporting</span></Accordion.Header>
                                     <Accordion.Body className="p-0" style={{ backgroundColor: "#060613" }}>
                                         <Row className="ms-2 p-3">

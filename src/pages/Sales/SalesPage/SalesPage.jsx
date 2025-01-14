@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
-import { Modal, Button, Container, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Container, Row, Col, Card, Spinner } from 'react-bootstrap';
 import saleServices from '../../../services/sale.services';
 import CreateSaleForm from '../../../components/Sales/CreateSaleForm/CreateSaleForm';
 import EditSaleForm from '../../../components/Sales/EditSaleForm/EditSaleForm';
-import Loader from '../../../components/Loader/Loader';
 import FiltersSale from '../../../components/Filters/FitersSale/FiltersSale';
 import TableSales from "../../../components/Sales/TableSales/TableSales";
 import { AuthContext } from '../../../contexts/auth.context';
+import Loader from '../../../components/Loader/Loader';
 
 import './SalesPage.css';
 
@@ -48,40 +48,12 @@ const SalesPage = () => {
 
     const handleFiltersChange = async (filters) => {
         setFilters(filters);
-        try {
-            setIsLoading(true);
-            const filteredData = await saleServices.filterSales(filters, sortOrder, currentPage, salesPerPage);
-            const newSalesData = filteredData.data.sales || [];
-            setSalesData(newSalesData);
-            setTotalPages(Math.ceil(filteredData.data.totalSales / salesPerPage));
-            setCurrentPage(1);
-            setVisibleSales(newSalesData);
-        } catch (error) {
-            console.error("Error aplicando filtros:", error);
-            setError("Hubo un problema aplicando los filtros.");
-        } finally {
-            setIsLoading(false);
-        }
+        setCurrentPage(1);
     };
 
     const handleSortChange = async (key, direction) => {
         setSortOrder({ key, direction });
         setCurrentPage(1);
-        try {
-            setIsLoading(true);
-            const { data } = await saleServices.getAllSales(1, salesPerPage, filters, { key, direction });
-            if (data) {
-                setSalesData(data.sales);
-                setVisibleSales(data.sales);
-                setTotalSales(data.totalSales);
-                setTotalPages(Math.ceil(data.totalSales / salesPerPage));
-            }
-        } catch (err) {
-            console.error(err);
-            setError('Hubo un problema al cargar los datos.');
-        } finally {
-            setIsLoading(false);
-        }
     };
 
     const handlePageChange = (direction) => {
@@ -109,9 +81,9 @@ const SalesPage = () => {
         } catch (err) {
             setError('Hubo un problema al eliminar la venta');
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     const handleClearFilters = () => {
         setFilters({});
@@ -150,36 +122,46 @@ const SalesPage = () => {
         isLoading ? <Loader /> :
             <div className="SalesPage">
                 <Container>
-                    <Row>
+                    <Row className="mb-4">
                         <Col>
-                            <h3>Ventas de Solentine</h3>
-                            <FiltersSale onChange={handleFiltersChange} onClear={handleClearFilters} />
-                            <TableSales
-                                sales={sortSales(visibleSales, sortOrder.key, sortOrder.direction)}
-                                onSortChange={handleSortChange}
-                                onEditClick={(sale) => handleSaleAction('edit', sale)}
-                                onDeleteClick={(sale) => handleSaleAction('delete', sale)}
-                            />
-
+                            <h3 className="text-center">Ventas de Solentine</h3>
                         </Col>
                     </Row>
-
+                    <Row className="mb-4">
+                        <Col>
+                            <Card className="p-4 shadow-sm">
+                                <FiltersSale onChange={handleFiltersChange} onClear={handleClearFilters} />
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Card className="p-4 shadow-sm">
+                                <TableSales
+                                    sales={sortSales(visibleSales, sortOrder.key, sortOrder.direction)}
+                                    onSortChange={handleSortChange}
+                                    onEditClick={(sale) => handleSaleAction('edit', sale)}
+                                    onDeleteClick={(sale) => handleSaleAction('delete', sale)}
+                                />
+                            </Card>
+                        </Col>
+                    </Row>
                     <Row className="mt-3">
-                        <Col className="mt-2 d-flex justify-content-between">
-                            <Button className="btn btn-primary" onClick={handleCreateSale}>
+                        <Col className="d-flex justify-content-between">
+                            <Button className="btn btn-primary mb-2" onClick={handleCreateSale}>
                                 Crear Venta
                             </Button>
                             <div>
                                 <Button
-                                    className="btn btn-primary me-2"
+                                    className="btn btn-primary me-2 mb-2"
                                     onClick={() => handlePageChange(-1)}
                                     disabled={currentPage === 1}
                                 >
                                     Anterior
                                 </Button>
-                                <span> Página {currentPage} de {totalPages}</span>
+                                <span className="page-info"> Página {currentPage} de {totalPages}</span>
                                 <Button
-                                    className="btn btn-primary ms-2"
+                                    className="btn btn-primary ms-2 mb-2"
                                     onClick={() => handlePageChange(1)}
                                     disabled={currentPage === totalPages}
                                 >
@@ -206,7 +188,7 @@ const SalesPage = () => {
                                 <Modal.Title>Editar Venta</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <EditSaleForm sale={modalState.sale} onSaleSaved={fetchSales} />
+                                <EditSaleForm sale={modalState.sale} onSaleSaved={fetchSales} onClose={handleCloseModal} />
                             </Modal.Body>
                         </Modal>
                     )}

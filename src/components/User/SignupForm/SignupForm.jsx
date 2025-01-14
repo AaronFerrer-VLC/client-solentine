@@ -110,7 +110,7 @@ const SignupForm = () => {
 
                 {error && <p className="text-danger">{error}</p>}
 
-                <Button variant="primary" type="submit">Registrarse</Button>
+                <Button className='mt-2' variant="dark" type="submit">Registrarse</Button>
             </Form>
     )
 }

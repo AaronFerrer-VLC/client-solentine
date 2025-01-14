@@ -1,3 +1,6 @@
 .Footer {
-    background-color: #EBE0D5
+    background-color: #EBE0D5;
+    /* Fondo consistente con las tarjetas */
+    color: #000000;
+    /* Texto negro */
 }

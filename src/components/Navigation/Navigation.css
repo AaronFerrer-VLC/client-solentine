@@ -1,19 +1,22 @@
 .Navigation .search-icon {
-    color: white
+    color: white;
 }
 
 .Navigation .btn:hover .search-icon {
-    color: black
+    color: black;
 }
 
 .Navigation .navbar {
     background-color: #EBE0D5;
+    /* Fondo consistente con las tarjetas */
     z-index: 1050;
+    color: #000000;
+    /* Texto negro */
 }
 
 .Navigation .navbar .nav-link:hover,
 .Navigation .dropdown-toggle:hover {
-    color: black !important
+    color: black !important;
 }
 
 .Navigation .navbar-toggler:focus {
@@ -30,15 +33,14 @@
 }
 
 .offcanvas {
-    background-color: red;
+    background-color: #EBE0D5 !important;
     z-index: 3000;
 }
 
 .offcanvas-body {
-    background-color: #141426 !important;
+    background-color: #EBE0D5 !important;
     padding: 0;
 }
-
 
 .offcanvas .row:hover {
     background-color: #060613;
@@ -50,21 +52,21 @@
 
 .offcanvas .btn:hover {
     background-color: transparent;
-    color: white
+    color: white;
 }
 
 .accordion-menu {
-    background: #060613
+    background: #EBE0D5 !important
 }
 
 .accordion-header .accordion-button:focus {
     box-shadow: none;
-    background: #060613;
-    color: white !important
+    background: #EBE0D5 !important;
+    color: white !important;
 }
 
 .accordion-button:not(.collapsed)::after {
-    background-image: var(--bs-accordion-btn-icon) !important
+    background-image: var(--bs-accordion-btn-icon) !important;
 }
 
 .accordion-item,
@@ -75,13 +77,12 @@
 }
 
 .dropdown-menu {
-    background-color: #141426;
+    background-color: #EBE0D5 !important;
 }
 
 .dropdown-item {
     font-size: 0.9rem;
 }
-
 
 .dropdown-item:hover {
     background-color: #060613;
@@ -93,7 +94,7 @@
 }
 
 .offcanvas hr {
-    margin: 0
+    margin: 0;
 }
 
 .profile-toggle::after {

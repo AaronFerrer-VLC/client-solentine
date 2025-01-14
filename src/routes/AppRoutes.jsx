@@ -5,8 +5,11 @@ import HomePage from '../pages/HomePage/HomePage'
 import Error404Page from '../pages/ErrorPage404Page/Error404Page'
 import SalesPage from '../pages/Sales/SalesPage/SalesPage'
 import UserProfilePage from '../pages/UserPage/UserProfilePage/UserProfilePage'
-import ClientPage from '../pages/ClientPage/ClientPage'
 import UsersPage from '../pages/UserPage/UserProfilePage/UsersPage/UsersPage'
+import ClientPage from '../pages/ClientPage/ClientPage'
+import ComercialsPage from '../pages/ComercialPage/ComercialsPage'
+
+
 const AppRoutes = () => {
     return (
         <div className="AppRoutes">
@@ -21,6 +24,7 @@ const AppRoutes = () => {
 
                 <Route path={'/ventas'} element={<SalesPage />} />
                 <Route path={'/clientes'} element={<ClientPage />} />
+                <Route path={'/comerciales'} element={<ComercialsPage />} />
 
                 <Route path={'/*'} element={<Error404Page />} />
             </Routes>

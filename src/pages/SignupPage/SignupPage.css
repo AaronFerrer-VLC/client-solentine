@@ -1,0 +1,15 @@
+.SignupPage {
+    background-color: white;
+    color: #000000;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signup-form-container {
+    background-color: #EBE0D5;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

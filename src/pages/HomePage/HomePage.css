@@ -1,0 +1,33 @@
+.HomePage {
+    padding: 20px;
+}
+
+.HomePage h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.HomePage p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.HomePage .card {
+    margin-bottom: 20px;
+}
+
+.HomePage .card-title {
+    font-size: 1.5rem;
+}
+
+.HomePage .card-text {
+    font-size: 1rem;
+}
+
+.HomePage .btn-primary {
+    margin-top: 10px;
+}
+
+.HomePage .btn-success {
+    margin-top: 20px;
+}

@@ -8,10 +8,8 @@
 
 .Navigation .navbar {
     background-color: #EBE0D5;
-    /* Fondo consistente con las tarjetas */
     z-index: 1050;
     color: #000000;
-    /* Texto negro */
 }
 
 .Navigation .navbar .nav-link:hover,

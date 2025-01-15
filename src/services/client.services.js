@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'
 
 class ClientServices {
     constructor() {
@@ -7,29 +7,33 @@ class ClientServices {
         })
 
         this.axiosApp.interceptors.request.use(config => {
-            const storedToken = localStorage.getItem('authToken');
+            const storedToken = localStorage.getItem('authToken')
             if (storedToken) {
                 config.headers.Authorization = `Bearer ${storedToken}`
             }
             return config
+<<<<<<< HEAD
         });
+=======
+        })
+>>>>>>> aaron
     }
 
     getAllClients() {
-        return this.axiosApp.get('/');
+        return this.axiosApp.get('/')
     }
 
     createClient(clientData) {
-        return this.axiosApp.post('/', clientData);
+        return this.axiosApp.post('/', clientData)
     }
 
     updateClient(id, clientData) {
-        return this.axiosApp.put(`/${id}`, clientData);
+        return this.axiosApp.put(`/${id}`, clientData)
     }
 
     deleteClient(id) {
-        return this.axiosApp.delete(`/${id}`);
+        return this.axiosApp.delete(`/${id}`)
     }
 }
 
-export default new ClientServices();
+export default new ClientServices()

@@ -5,10 +5,9 @@ import HomePage from '../pages/HomePage/HomePage'
 import Error404Page from '../pages/ErrorPage404Page/Error404Page'
 import SalesPage from '../pages/Sales/SalesPage/SalesPage'
 import UserProfilePage from '../pages/UserPage/UserProfilePage/UserProfilePage'
-import UsersPage from '../pages/UserPage/UserProfilePage/UsersPage/UsersPage'
+import UsersPage from '../pages/UserPage/UsersPage/UsersPage'
 import ClientPage from '../pages/ClientPage/ClientPage'
 import ComercialsPage from '../pages/ComercialPage/ComercialsPage'
-
 
 const AppRoutes = () => {
     return (

@@ -1,21 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Card, Spinner } from 'react-bootstrap';
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import { Link } from 'react-router-dom'
+import { Container, Row, Col, Spinner, Card, Button } from 'react-bootstrap';
+import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
 import './HomePage.css';
 import clientServices from '../../services/client.services';
 import comercialServices from '../../services/comercial.services';
 import saleServices from '../../services/sale.services';
+import geocodingServices from '../../services/geocoding.services';
 
 const containerStyle = {
     width: '100%',
     height: '400px'
-}
+};
 
 const center = {
     lat: 39.57299,
     lng: 2.65586
-}
+};
+
+const ClientMarker = ({ marker, onClick }) => (
+    <Marker
+        position={marker.position}
+        onClick={() => onClick(marker)}
+    />
+);
+
+const ClientInfoWindow = ({ client, onClose }) => (
+    <InfoWindow
+        position={client.position}
+        onCloseClick={onClose}
+    >
+        <div>
+            <h6>{client.name}</h6>
+            <p>{client.address}</p>
+        </div>
+    </InfoWindow>
+);
 
 const HomePage = () => {
     const [clients, setClients] = useState([]);
@@ -24,6 +43,8 @@ const HomePage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedZone, setSelectedZone] = useState(null);
     const [selectedClient, setSelectedClient] = useState(null);
+    const [markers, setMarkers] = useState([]);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,14 +53,46 @@ const HomePage = () => {
                     clientServices.getAllClients(),
                     comercialServices.getAllComercials(),
                     saleServices.getAllSalesForHomePage()
-                ])
+                ]);
 
                 setClients(clientsData.data);
                 setComercials(comercialsData.data);
                 setSales(salesData.data.sales);
+
+                const clientMarkers = await Promise.all(clientsData.data.map(async (client) => {
+                    try {
+                        const geocodeResult = await geocodingServices.getCoordinates(client.address);
+                        if (
+                            geocodeResult &&
+                            geocodeResult.results &&
+                            geocodeResult.results.length > 0 &&
+                            geocodeResult.results[0].geometry
+                        ) {
+                            const location = geocodeResult.results[0].geometry.location;
+                            return {
+                                id: client._id,
+                                name: client.name,
+                                address: client.address,
+                                position: {
+                                    lat: location.lat,
+                                    lng: location.lng
+                                }
+                            };
+                        } else {
+                            console.warn(`No se encontraron resultados para: ${client.address}`);
+                            return null;
+                        }
+                    } catch (error) {
+                        console.error(`Error al procesar el cliente ${client.name}: ${error.message}`);
+                        return null;
+                    }
+                }));
+
+                setMarkers(clientMarkers.filter(marker => marker !== null));
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error al cargar los datos:', error);
-            } finally {
+                setError('Hubo un error al cargar los datos. Inténtalo de nuevo más tarde.');
                 setIsLoading(false);
             }
         };
@@ -160,23 +213,51 @@ const HomePage = () => {
                                     </div>
                                 </InfoWindow>
                             )}
-                            {selectedClient && (
-                                <InfoWindow
-                                    position={{ lat: selectedClient.position.lat, lng: selectedClient.position.lng }}
-                                    onCloseClick={() => setSelectedClient(null)}
+                        </Col>
+                    </Row>
+                    <Row className="mb-4">
+                        <Col>
+                            <h3 className="text-center">Mapa de Clientes y Zonas</h3>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <LoadScript googleMapsApiKey="">
+                                <GoogleMap
+                                    mapContainerStyle={containerStyle}
+                                    center={center}
+                                    zoom={10}
+                                    options={{
+                                        disableDefaultUI: true,
+                                        zoomControl: true,
+                                    }}
                                 >
-                                    <div>
-                                        <h4>{selectedClient.name}</h4>
-                                        <p>{selectedClient.address}</p>
-                                    </div>
-                                </InfoWindow>
-                            )}
-                        </GoogleMap>
-                    </LoadScript>
-                </Col>
-            </Row>
-        </Container>
-    );
+                                    {markers.length === 0 && (
+                                        <div className="text-center" style={{ padding: '10px', backgroundColor: 'white' }}>
+                                            <p>No hay marcadores disponibles para mostrar.</p>
+                                        </div>
+                                    )}
+                                    {markers.map(marker => (
+                                        <ClientMarker
+                                            key={marker.id}
+                                            marker={marker}
+                                            onClick={setSelectedClient}
+                                        />
+                                    ))}
+                                    {selectedClient && (
+                                        <ClientInfoWindow
+                                            client={selectedClient}
+                                            onClose={() => setSelectedClient(null)}
+                                        />
+                                    )}
+                                </GoogleMap>
+                            </LoadScript>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+            )
+            );
 };
 
-export default HomePage;
+            export default HomePage;

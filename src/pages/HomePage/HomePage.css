@@ -31,3 +31,9 @@
 .HomePage .btn-success {
     margin-top: 20px;
 }
+
+@media (max-width: 768px) {
+    .HomePage {
+        padding: 1rem;
+    }
+}

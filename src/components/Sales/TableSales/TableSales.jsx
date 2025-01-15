@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { Table, Button, Spinner } from 'react-bootstrap';
-import Loader from '../../Loader/Loader';
+import React, { useState } from 'react'
+import { Table, Button, Spinner } from 'react-bootstrap'
+import Loader from '../../Loader/Loader'
+
+import './TableSales.css'
 
 const TableSales = ({ sales, onSortChange, onEditClick, onDeleteClick }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSorting, setIsSorting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
+    const [isSorting, setIsSorting] = useState(false)
 
     const handleSort = async (key, direction) => {
         setIsSorting(true);
-        await onSortChange(key, direction);
-        setIsSorting(false);
-    };
+        await onSortChange(key, direction)
+        setIsSorting(false)
+    }
 
     return (
         isLoading ? <Loader /> :
@@ -69,7 +71,7 @@ const TableSales = ({ sales, onSortChange, onEditClick, onDeleteClick }) => {
                     </tbody>
                 </Table>
             </div>
-    );
-};
+    )
+}
 
-export default TableSales;
+export default TableSales

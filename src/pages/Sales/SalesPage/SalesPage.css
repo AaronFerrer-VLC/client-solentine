@@ -2,6 +2,7 @@
     background-color: #f8f9fa;
     min-height: 100vh;
     padding-top: 20px;
+    padding: 2rem;
 }
 
 .SalesPage h3 {
@@ -38,4 +39,16 @@
 .SalesPage .page-info {
     color: #000000;
     font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .SalesPage {
+        padding: 1rem;
+    }
+
+    .SalesPage .page-info {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+    }
 }

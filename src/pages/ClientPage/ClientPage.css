@@ -1,0 +1,9 @@
+.ClientPage {
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .ClientPage {
+        padding: 1rem;
+    }
+}

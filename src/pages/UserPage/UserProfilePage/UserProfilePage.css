@@ -1,7 +1,8 @@
 .UserProfilePage {
-    background-color: #f8f9fa;
+    background-color: white;
+    color: #000000;
     min-height: 100vh;
-    padding-top: 20px;
+    padding: 2rem;
 }
 
 .UserProfilePage .card {
@@ -24,4 +25,27 @@
 
 .UserProfilePage .text-danger:hover {
     color: white !important
+}
+
+@media (max-width: 768px) {
+    .UserProfilePage {
+        padding: 1rem;
+    }
+
+    .UserProfilePage .card {
+        padding: 1rem;
+    }
+
+    .UserProfilePage .card img {
+        height: 4rem;
+        width: 4rem;
+    }
+
+    .UserProfilePage .card h3 {
+        font-size: 1.5rem;
+    }
+
+    .UserProfilePage .card p {
+        font-size: 1rem;
+    }
 }

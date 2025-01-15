@@ -1,25 +1,25 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
-import clientServices from '../../../services/client.services'
+import comercialServices from '../../../services/comercial.services'
 
-const EditClientForm = ({ client, onClientSaved, onClose }) => {
-    const [name, setName] = useState(client.name)
-    const [email, setEmail] = useState(client.email)
-    const [address, setAddress] = useState(client.address)
+const CreateComercialForm = ({ onComercialSaved, onClose }) => {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            await clientServices.updateClient(client._id, { name, email, address })
-            onClientSaved()
+            await comercialServices.createComercial({ name, email, phone })
+            onComercialSaved()
             onClose()
         } catch (error) {
-            console.error('Error al editar el cliente:', error)
+            console.error('Error al crear el cliente:', error)
         }
     }
 
     return (
-        <div className='EditClientForm'>
+        <div className='CreateComercialForm'>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formName">
                     <Form.Label>Nombre</Form.Label>
@@ -41,21 +41,22 @@ const EditClientForm = ({ client, onClientSaved, onClose }) => {
                         required
                     />
                 </Form.Group>
-                <Form.Group controlId="formAddress" className="mt-3">
-                    <Form.Label>Dirección</Form.Label>
+                <Form.Group controlId="formPhone" className="mt-3">
+                    <Form.Label>Teléfono</Form.Label>
                     <Form.Control
-                        type="text"
-                        placeholder="Ingrese la dirección"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
+                        type="number"
+                        placeholder="Ingrese el teléfono"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                         required
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit" className="mt-3">
-                    Guardar
+                <Button variant="dark" type="submit" className="mt-3">
+                    Crear
                 </Button>
             </Form>
         </div>
     )
 }
-export default EditClientForm
+
+export default CreateComercialForm

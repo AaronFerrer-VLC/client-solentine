@@ -1,5 +1,7 @@
-import React from 'react';
-import ClientCard from '../ClientCard/ClientCard';
+import React from 'react'
+import ClientCard from '../ClientCard/ClientCard'
+
+import './ClientList.css'
 
 const ClientList = ({ clients, onEditClick, onDeleteClick }) => {
     return (
@@ -13,7 +15,6 @@ const ClientList = ({ clients, onEditClick, onDeleteClick }) => {
                 />
             ))}
         </div>
-    );
-};
-
-export default ClientList;
+    )
+}
+export default ClientList

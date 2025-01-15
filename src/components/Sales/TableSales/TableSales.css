@@ -1,0 +1,9 @@
+.TableSales {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .TableSales table {
+        width: 100%;
+    }
+}

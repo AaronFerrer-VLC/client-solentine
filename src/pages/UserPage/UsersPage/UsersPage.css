@@ -1,0 +1,27 @@
+.UsersPage {
+    background-color: white;
+    color: #000000;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.UsersPage .card {
+    background-color: #EBE0D5;
+    border: none;
+    border-radius: 8px;
+}
+
+.UsersPage .btn-style-1 {
+    color: black
+}
+
+
+.UsersPage p {
+    color: #000000;
+}
+
+@media (max-width: 768px) {
+    .UsersPage {
+        padding: 1rem;
+    }
+}

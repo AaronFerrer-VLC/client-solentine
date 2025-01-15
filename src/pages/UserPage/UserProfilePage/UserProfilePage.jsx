@@ -1,62 +1,62 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Button, Modal, Card } from 'react-bootstrap';
-import { useParams, useNavigate } from 'react-router-dom';
-import { AuthContext } from "../../../contexts/auth.context";
-import Loader from "../../../components/Loader/Loader";
-import EditFormUser from "../../../components/User/EditFormUser/EditFormUser";
-import userServices from '../../../services/user.services';
-import "./UserProfilePage.css";
+import React, { useState, useEffect, useContext } from 'react'
+import { Container, Row, Col, Button, Modal, Card } from 'react-bootstrap'
+import { useParams, useNavigate } from 'react-router-dom'
+import { AuthContext } from "../../../contexts/auth.context"
+import Loader from "../../../components/Loader/Loader"
+import EditFormUser from "../../../components/User/EditFormUser/EditFormUser"
+import userServices from '../../../services/user.services'
+import "./UserProfilePage.css"
 import { homer } from "../../../const/image-path"
 
 const UserProfilePage = () => {
-    const { loggedUser, logoutUser } = useContext(AuthContext);
-    const { id: userId } = useParams();
-    const navigate = useNavigate();
-    const [userData, setUserData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const { loggedUser, logoutUser } = useContext(AuthContext)
+    const { id: userId } = useParams()
+    const navigate = useNavigate()
+    const [userData, setUserData] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
     useEffect(() => {
-        fetchUserData();
-    }, [userId]);
+        fetchUserData()
+    }, [userId])
 
     const fetchUserData = () => {
         userServices
             .getUser(userId)
             .then((response) => {
-                const { data: userData } = response;
-                setUserData(userData);
-                setIsLoading(false);
+                const { data: userData } = response
+                setUserData(userData)
+                setIsLoading(false)
             })
             .catch((err) => {
-                setError('Error fetching user data');
-                setIsLoading(false);
-            });
-    };
+                setError('Error fetching user data')
+                setIsLoading(false)
+            })
+    }
 
     const handleDeleteUser = () => {
         userServices
             .deleteUser(userId)
             .then(() => {
-                logoutUser();
-                navigate('/');
+                logoutUser()
+                navigate('/')
             })
             .catch((err) => {
-                setError('Error deleting user');
-            });
-    };
+                setError('Error deleting user')
+            })
+    }
 
     if (isLoading) {
-        return <Loader message="Cargando Perfil del usuario..." />;
+        return <Loader message="Cargando Perfil del usuario..." />
     }
 
     if (error) {
-        return <p className="text-danger">{error}</p>;
+        return <p className="text-danger">{error}</p>
     }
 
-    const { avatar, username, bio, role, sales = [], email, createdAt, updatedAt, deletedAt } = userData || {};
+    const { avatar, username, bio, role, sales = [], email, createdAt, updatedAt, deletedAt } = userData || {}
 
     return (
         <div className='UserProfilePage'>
@@ -75,7 +75,6 @@ const UserProfilePage = () => {
                                     <Row className="align-items-center">
                                         <Col xs={12} md={8}>
                                             <h3 className="fw-bold">{username}</h3>
-                                            <p className="fs-5">{bio}</p>
                                             <p className="fs-5">Email: {email}</p>
                                             <p className="fs-5">Role: {role}</p>
                                             <p className="fs-5">Ventas registradas: {sales.length}</p>
@@ -129,7 +128,7 @@ const UserProfilePage = () => {
                 </Modal>
             </Container>
         </div>
-    );
-};
+    )
+}
 
-export default UserProfilePage;
+export default UserProfilePage

@@ -7,9 +7,9 @@ class BrandServices {
         });
 
         this.axiosApp.interceptors.request.use(config => {
-            const storedToken = localStorage.getItem('authToken');
+            const storedToken = localStorage.getItem('authToken')
             if (storedToken) {
-                config.headers.Authorization = `Bearer ${storedToken}`;
+                config.headers.Authorization = `Bearer ${storedToken}`
             }
             return config;
         });

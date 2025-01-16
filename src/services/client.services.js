@@ -12,11 +12,7 @@ class ClientServices {
                 config.headers.Authorization = `Bearer ${storedToken}`
             }
             return config
-<<<<<<< HEAD
-        });
-=======
         })
->>>>>>> aaron
     }
 
     getAllClients() {

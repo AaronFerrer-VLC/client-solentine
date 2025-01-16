@@ -1,50 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Spinner, Card, Button } from 'react-bootstrap';
-import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
 import './HomePage.css';
 import clientServices from '../../services/client.services';
 import comercialServices from '../../services/comercial.services';
 import saleServices from '../../services/sale.services';
 import geocodingServices from '../../services/geocoding.services';
-
-const containerStyle = {
-    width: '100%',
-    height: '400px'
-};
-
-const center = {
-    lat: 39.57299,
-    lng: 2.65586
-};
-
-const ClientMarker = ({ marker, onClick }) => (
-    <Marker
-        position={marker.position}
-        onClick={() => onClick(marker)}
-    />
-);
-
-const ClientInfoWindow = ({ client, onClose }) => (
-    <InfoWindow
-        position={client.position}
-        onCloseClick={onClose}
-    >
-        <div>
-            <h6>{client.name}</h6>
-            <p>{client.address}</p>
-        </div>
-    </InfoWindow>
-);
+import ClientMap from '../../components/ClientMap/ClientMap';
 
 const HomePage = () => {
     const [clients, setClients] = useState([]);
     const [comercials, setComercials] = useState([]);
     const [sales, setSales] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedZone, setSelectedZone] = useState(null);
-    const [selectedClient, setSelectedClient] = useState(null);
     const [markers, setMarkers] = useState([]);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -92,7 +60,6 @@ const HomePage = () => {
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error al cargar los datos:', error);
-                setError('Hubo un error al cargar los datos. Inténtalo de nuevo más tarde.');
                 setIsLoading(false);
             }
         };
@@ -101,13 +68,7 @@ const HomePage = () => {
     }, []);
 
     return (
-        isLoading ? (
-            <Spinner animation="border" />
-        ) : error ? (
-            <div className="text-center">
-                <h3>{error}</h3>
-            </div>
-        ) : (
+        isLoading ? <Spinner animation="border" /> : (
             <div className='HomePage'>
                 <Container className="HomePage mt-5">
                     <Row className="mb-4">
@@ -190,36 +151,7 @@ const HomePage = () => {
                     </Row>
                     <Row>
                         <Col>
-                            <LoadScript googleMapsApiKey="">
-                                <GoogleMap
-                                    mapContainerStyle={containerStyle}
-                                    center={center}
-                                    zoom={10}
-                                    options={{
-                                        disableDefaultUI: true,
-                                        zoomControl: true,
-                                    }}
-                                >
-                                    {markers.length === 0 && (
-                                        <div className="text-center" style={{ padding: '10px', backgroundColor: 'white' }}>
-                                            <p>No hay marcadores disponibles para mostrar.</p>
-                                        </div>
-                                    )}
-                                    {markers.map(marker => (
-                                        <ClientMarker
-                                            key={marker.id}
-                                            marker={marker}
-                                            onClick={setSelectedClient}
-                                        />
-                                    ))}
-                                    {selectedClient && (
-                                        <ClientInfoWindow
-                                            client={selectedClient}
-                                            onClose={() => setSelectedClient(null)}
-                                        />
-                                    )}
-                                </GoogleMap>
-                            </LoadScript>
+                            <ClientMap markers={markers} />
                         </Col>
                     </Row>
                 </Container>

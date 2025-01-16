@@ -1,29 +1,25 @@
-import axios from 'axios'
+import axios from 'axios';
+
+const apiUrl = import.meta.env.VITE_APP_API_URL;
 
 class GeocodingService {
     constructor() {
         this.axiosApp = axios.create({
-            baseURL: `${import.meta.env.VITE_APP_API_URL}/api`
-        })
+            baseURL: `${apiUrl}/api`
+        });
     }
 
     async getCoordinates(address) {
         try {
             const response = await this.axiosApp.get(`/geocoding/coordinates`, {
                 params: { address }
-            })
-
-            if (!response.data) {
-                throw new Error('No se recibió respuesta válida del servidor')
-            }
-
-            return response.data
+            });
+            return response.data;
         } catch (error) {
-            console.error(`Error al obtener coordenadas: ${error.message}`)
-            throw new Error('No se pudieron obtener las coordenadas')
+            console.error(`Error al obtener coordenadas: ${error.message}`, error.response?.data);
+            throw new Error('No se pudieron obtener las coordenadas');
         }
     }
 }
 
-export default new GeocodingService()
-
+export default new GeocodingService();

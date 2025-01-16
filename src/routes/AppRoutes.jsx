@@ -8,6 +8,7 @@ import UserProfilePage from '../pages/UserPage/UserProfilePage/UserProfilePage'
 import UsersPage from '../pages/UserPage/UsersPage/UsersPage'
 import ClientPage from '../pages/ClientPage/ClientPage'
 import ComercialsPage from '../pages/ComercialPage/ComercialsPage'
+import PageSalesByYear from '../pages/ChartsPage/ChartsSales/PageSalesByYear'
 
 const AppRoutes = () => {
     return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
                 <Route path={'/ventas'} element={<SalesPage />} />
                 <Route path={'/clientes'} element={<ClientPage />} />
                 <Route path={'/comerciales'} element={<ComercialsPage />} />
+                <Route path={'/ventas-por-años'} element={<PageSalesByYear />} />
 
                 <Route path={'/*'} element={<Error404Page />} />
             </Routes>

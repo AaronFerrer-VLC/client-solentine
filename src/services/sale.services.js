@@ -1,33 +1,37 @@
-import axios from 'axios'
+import axios from 'axios';
 
 class SaleServices {
     constructor() {
         this.axiosApp = axios.create({
             baseURL: `${import.meta.env.VITE_APP_API_URL}/api/sales`
-        })
+        });
 
         this.axiosApp.interceptors.request.use(config => {
-            const storedToken = localStorage.getItem('authToken')
+            const storedToken = localStorage.getItem('authToken');
             if (storedToken) {
-                config.headers.Authorization = `Bearer ${storedToken}`
+                config.headers.Authorization = `Bearer ${storedToken}`;
             }
-            return config
-        })
+            return config;
+        });
     }
 
-    getAllSales(page, limit, filters, sortOrder) {
+    getAllSales(page = 1, limit = 10, filters = {}, sortOrder = { key: 'Fecha', direction: 'asc' }) {
         const query = {
-            page,
-            limit,
             ...filters,
             sortKey: sortOrder.key,
-            sortDirection: sortOrder.direction
+            sortDirection: sortOrder.direction,
+            page,
+            limit
         };
         return this.axiosApp.get('/', { params: query });
     }
 
     getAllSalesForHomePage() {
-        return this.axiosApp.get('/all')
+        return this.axiosApp.get('/all');
+    }
+
+    getAllSalesWithoutPagination() {
+        return this.axiosApp.get('/all-without-pagination');
     }
 
     filterSales(filters, sortOrder, page, limit) {
@@ -42,16 +46,16 @@ class SaleServices {
     }
 
     createSale(saleData) {
-        return this.axiosApp.post('/', saleData)
+        return this.axiosApp.post('/', saleData);
     }
 
     editSale(id, saleData) {
-        return this.axiosApp.put(`/${id}`, saleData)
+        return this.axiosApp.put(`/${id}`, saleData);
     }
 
     deleteSale(id) {
-        return this.axiosApp.delete(`/${id}`)
+        return this.axiosApp.delete(`/${id}`);
     }
 }
 
-export default new SaleServices()
+export default new SaleServices();

@@ -150,11 +150,6 @@ const HomePage = () => {
                         <ClientMap markers={markers} />
                     </Col>
                 </Row>
-                <Row className="mb-4">
-                    <Col>
-                        <h3 className="text-center">Mapa de Clientes y Zonas</h3>
-                    </Col>
-                </Row>
             </Container>
         </div>
     );

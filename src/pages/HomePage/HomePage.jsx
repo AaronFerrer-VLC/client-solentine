@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Container, Row, Col, Spinner, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
@@ -7,8 +7,10 @@ import comercialServices from '../../services/comercial.services';
 import saleServices from '../../services/sale.services';
 import geocodingServices from '../../services/geocoding.services';
 import ClientMap from '../../components/ClientMap/ClientMap';
+import { AuthContext } from '../../contexts/auth.context';
 
 const HomePage = () => {
+    const { loggedUser } = useContext(AuthContext);
     const [clients, setClients] = useState([]);
     const [comercials, setComercials] = useState([]);
     const [sales, setSales] = useState([]);
@@ -28,6 +30,27 @@ const HomePage = () => {
                 setComercials(comercialsData.data);
                 setSales(salesData.data.sales);
 
+                // Verificar que el usuario esté autenticado antes de geocodificar
+                const token = localStorage.getItem('authToken');
+                if (!token || !loggedUser) {
+                    console.warn('⚠️ Usuario no autenticado, omitiendo geocodificación');
+                    // Crear marcadores solo con coordenadas existentes
+                    const clientMarkers = clientsData.data
+                        .filter(client => client.position && client.position.lat && client.position.lng)
+                        .map(client => ({
+                            id: client._id,
+                            name: client.name,
+                            address: client.address,
+                            position: {
+                                lat: client.position.lat,
+                                lng: client.position.lng
+                            }
+                        }));
+                    setMarkers(clientMarkers);
+                    setIsLoading(false);
+                    return;
+                }
+
                 // Optimización: Si el cliente ya tiene coordenadas guardadas, usarlas
                 // Solo geocodificar si no tiene coordenadas
                 const clientMarkers = await Promise.all(clientsData.data.map(async (client) => {
@@ -46,7 +69,7 @@ const HomePage = () => {
                             };
                         }
 
-                        // Solo geocodificar si no tiene coordenadas
+                        // Solo geocodificar si no tiene coordenadas y el usuario está autenticado
                         // El servicio usa cache automáticamente
                         const geocodeResult = await geocodingServices.getCoordinates(client.address);
                         if (

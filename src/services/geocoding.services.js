@@ -25,6 +25,11 @@ class GeocodingService {
                 const token = localStorage.getItem('authToken');
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
+                } else {
+                    // Log en desarrollo para debuggear
+                    if (import.meta.env.DEV) {
+                        console.warn('⚠️ GeocodingService: No se encontró token de autenticación en localStorage');
+                    }
                 }
                 return config;
             },
@@ -37,10 +42,17 @@ class GeocodingService {
         this.axiosApp.interceptors.response.use(
             (response) => response,
             (error) => {
-                // Si es 401, el token puede haber expirado
+                // Si es 401, el token puede haber expirado o no estar presente
                 if (error.response?.status === 401) {
-                    console.warn('⚠️ Token de autenticación inválido o expirado');
-                    // Opcional: redirigir al login o refrescar el token
+                    const token = localStorage.getItem('authToken');
+                    if (!token) {
+                        console.error('❌ GeocodingService: No hay token de autenticación. Por favor, inicia sesión.');
+                    } else {
+                        console.warn('⚠️ GeocodingService: Token de autenticación inválido o expirado');
+                        // Limpiar token inválido
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('userId');
+                    }
                 }
                 return Promise.reject(error);
             }
@@ -57,6 +69,12 @@ class GeocodingService {
     async getCoordinates(address, useCache = true) {
         if (!address || typeof address !== 'string' || address.trim() === '') {
             throw new Error('La dirección es requerida');
+        }
+
+        // Verificar que el usuario esté autenticado
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            throw new Error('Debes iniciar sesión para usar la geocodificación');
         }
 
         const normalizedAddress = address.trim();

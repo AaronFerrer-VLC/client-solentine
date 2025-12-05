@@ -1,15 +1,9 @@
 import { Container, Row, Col } from 'react-bootstrap'
 import LoginForm from '../../components/User/LoginForm/LoginForm'
-import Loader from '../../components/Loader/Loader'
-import { useState } from 'react'
 import './LoginPage.css'
 
 const LoginPage = () => {
-
-    const [isLoading, setIsLoading] = useState(false)
-
     return (
-        isLoading ? <Loader /> :
             <div className='LoginPage'>
                 <Container>
                     <Row>

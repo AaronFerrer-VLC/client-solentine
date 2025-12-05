@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { Container, Row, Col, Button, Modal, Card } from 'react-bootstrap'
 import { useParams, useNavigate } from 'react-router-dom'
 import { AuthContext } from "../../../contexts/auth.context"
@@ -18,11 +18,7 @@ const UserProfilePage = () => {
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
 
-    useEffect(() => {
-        fetchUserData()
-    }, [userId])
-
-    const fetchUserData = () => {
+    const fetchUserData = useCallback(() => {
         userServices
             .getUser(userId)
             .then((response) => {
@@ -30,11 +26,15 @@ const UserProfilePage = () => {
                 setUserData(userData)
                 setIsLoading(false)
             })
-            .catch((err) => {
+            .catch(() => {
                 setError('Error fetching user data')
                 setIsLoading(false)
             })
-    }
+    }, [userId])
+
+    useEffect(() => {
+        fetchUserData()
+    }, [fetchUserData])
 
     const handleDeleteUser = () => {
         userServices
@@ -43,7 +43,7 @@ const UserProfilePage = () => {
                 logoutUser()
                 navigate('/')
             })
-            .catch((err) => {
+            .catch(() => {
                 setError('Error deleting user')
             })
     }
@@ -56,7 +56,7 @@ const UserProfilePage = () => {
         return <p className="text-danger">{error}</p>
     }
 
-    const { avatar, username, bio, role, sales = [], email, createdAt, updatedAt, deletedAt } = userData || {}
+    const { avatar, username, role, sales = [], email, createdAt, updatedAt, deletedAt } = userData || {}
 
     return (
         <div className='UserProfilePage'>

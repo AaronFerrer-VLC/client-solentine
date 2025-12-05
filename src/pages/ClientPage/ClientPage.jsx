@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Modal, Spinner } from 'react-bootstrap';
 import clientServices from '../../services/client.services';
 import ListClient from '../../components/Client/ClientList/ClientList';

@@ -1,50 +1,42 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react';
-import { Modal, Button, Container, Row, Col, Card, Spinner } from 'react-bootstrap';
+import { useEffect, useState, useCallback } from 'react';
+import { Modal, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import saleServices from '../../../services/sale.services';
 import CreateSaleForm from '../../../components/Sales/CreateSaleForm/CreateSaleForm';
 import EditSaleForm from '../../../components/Sales/EditSaleForm/EditSaleForm';
 import FiltersSale from '../../../components/Filters/FitersSale/FiltersSale';
 import TableSales from "../../../components/Sales/TableSales/TableSales";
-import { AuthContext } from '../../../contexts/auth.context';
 import Loader from '../../../components/Loader/Loader';
 
 import './SalesPage.css';
 
 const SalesPage = () => {
-    const [salesData, setSalesData] = useState([]);
     const [visibleSales, setVisibleSales] = useState([]);
-    const [totalSales, setTotalSales] = useState(0);
     const salesPerPage = 100;
     const [filters, setFilters] = useState({});
     const [sortOrder, setSortOrder] = useState({ key: 'Fecha', direction: 'asc' });
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [modalState, setModalState] = useState({ type: null, sale: null });
-    const { hasRole } = useContext(AuthContext);
-
-    useEffect(() => {
-        fetchSales();
-    }, [currentPage, filters, sortOrder]);
 
     const fetchSales = useCallback(async () => {
         try {
             setIsLoading(true);
             const { data } = await saleServices.getAllSales(currentPage, salesPerPage, filters, sortOrder);
             if (data) {
-                setSalesData(data.sales);
                 setVisibleSales(data.sales);
-                setTotalSales(data.totalSales);
                 setTotalPages(Math.ceil(data.totalSales / salesPerPage));
             }
         } catch (err) {
-            console.error(err);
-            setError('Hubo un problema al cargar los datos.');
+            console.error('Error al cargar las ventas:', err);
         } finally {
             setIsLoading(false);
         }
     }, [currentPage, filters, sortOrder]);
+
+    useEffect(() => {
+        fetchSales();
+    }, [fetchSales]);
 
     const handleFiltersChange = async (filters) => {
         setFilters(filters);
@@ -71,7 +63,7 @@ const SalesPage = () => {
 
     const handleDeleteSale = async () => {
         if (!modalState.sale?._id) {
-            setError("ID de la venta no válido");
+            console.error("ID de la venta no válido");
             return;
         }
         try {
@@ -79,7 +71,7 @@ const SalesPage = () => {
             await fetchSales();
             handleCloseModal();
         } catch (err) {
-            setError('Hubo un problema al eliminar la venta');
+            console.error('Error al eliminar la venta:', err);
         } finally {
             setIsLoading(false);
         }

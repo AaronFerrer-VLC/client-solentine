@@ -8,7 +8,6 @@ const PageSalesByYear = () => {
     const [filter, setFilter] = useState('year');
     const [year, setYear] = useState(new Date().getFullYear());
     const [data, setData] = useState([]);
-    const [sortOrder, setSortOrder] = useState({ key: 'Fecha', direction: 'asc' });
 
     useEffect(() => {
         const fetchSalesData = async () => {
@@ -56,7 +55,7 @@ const PageSalesByYear = () => {
         };
 
         fetchSalesData();
-    }, [filter, year, sortOrder]);
+    }, [filter, year]);
 
     return (
         <div className="PageSalesByYear">

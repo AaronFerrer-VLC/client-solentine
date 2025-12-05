@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Container, Row, Col, Spinner, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
@@ -58,7 +58,8 @@ const HomePage = () => {
 
                 // Optimización: Si el cliente ya tiene coordenadas guardadas, usarlas
                 // Solo geocodificar si no tiene coordenadas
-                const clientMarkers = await Promise.all(clientsData.data.map(async (client) => {
+                const clientMarkers = await Promise.all(clientsArray.map(async (client) => {
+                    if (!client) return null;
                     try {
                         // Si el cliente ya tiene posición guardada, usarla directamente
                         // Esto evita llamadas innecesarias a la API de Google Maps
@@ -117,7 +118,7 @@ const HomePage = () => {
         };
 
         fetchData();
-    }, []);
+    }, [loggedUser]);
 
     return (
         <div className='HomePage'>
@@ -170,7 +171,7 @@ const HomePage = () => {
                                 <Col md={4}>
                                     <Card className="text-center">
                                         <Card.Body>
-                                            <h3>{sales.length}</h3>
+                                            <h3>{sales?.length || 0}</h3>
                                             <p>Ventas Totales</p>
                                         </Card.Body>
                                     </Card>
@@ -178,7 +179,7 @@ const HomePage = () => {
                                 <Col md={4}>
                                     <Card className="text-center">
                                         <Card.Body>
-                                            <h3>{clients.length}</h3>
+                                            <h3>{clients?.length || 0}</h3>
                                             <p>Clientes Activos</p>
                                         </Card.Body>
                                     </Card>
@@ -186,7 +187,7 @@ const HomePage = () => {
                                 <Col md={4}>
                                     <Card className="text-center">
                                         <Card.Body>
-                                            <h3>{comercials.length}</h3>
+                                            <h3>{comercials?.length || 0}</h3>
                                             <p>Comerciales</p>
                                         </Card.Body>
                                     </Card>

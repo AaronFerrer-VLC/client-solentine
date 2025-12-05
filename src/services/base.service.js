@@ -8,8 +8,9 @@ import { handleApiError } from '../utils/errorHandler';
 
 class BaseService {
   constructor(baseURL) {
+    const apiUrl = import.meta.env.VITE_APP_API_URL || 'https://server-solentine.fly.dev';
     this.axiosApp = axios.create({
-      baseURL: `${import.meta.env.VITE_APP_API_URL}${baseURL}`,
+      baseURL: `${apiUrl}${baseURL}`,
       timeout: 30000, // 30 seconds timeout
     });
 

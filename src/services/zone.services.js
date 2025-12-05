@@ -2,8 +2,9 @@ import axios from 'axios';
 
 class ZoneServices {
     constructor() {
+        const apiUrl = import.meta.env.VITE_APP_API_URL || 'https://server-solentine.fly.dev';
         this.axiosApp = axios.create({
-            baseURL: `${import.meta.env.VITE_APP_API_URL}/api/zones`
+            baseURL: `${apiUrl}/api/zones`
         });
 
         this.axiosApp.interceptors.request.use(config => {

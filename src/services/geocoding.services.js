@@ -2,7 +2,7 @@ import axios from 'axios';
 import geocodingCache from '../utils/geocodingCache';
 import { logGoogleMapsError, getUserFriendlyMessage, detectGoogleMapsError } from '../utils/googleMapsErrors';
 
-const apiUrl = import.meta.env.VITE_APP_API_URL;
+const apiUrl = import.meta.env.VITE_APP_API_URL || 'https://server-solentine.fly.dev';
 
 /**
  * Servicio de Geocodificación

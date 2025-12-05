@@ -3,9 +3,9 @@ import axios from 'axios'
 class UploadServices {
 
     constructor() {
-
+        const apiUrl = import.meta.env.VITE_APP_API_URL || 'https://server-solentine.fly.dev';
         this.api = axios.create({
-            baseURL: `${import.meta.env.VITE_APP_API_URL}/api/upload`
+            baseURL: `${apiUrl}/api/upload`
         })
     }
 

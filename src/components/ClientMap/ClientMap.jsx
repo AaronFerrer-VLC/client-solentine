@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
-import axios from 'axios';
+import { useState } from 'react';
+import { GoogleMap, Marker, InfoWindow } from '@react-google-maps/api';
+import { useGoogleMaps } from '../../contexts/GoogleMapsContext';
+import { Alert } from 'react-bootstrap';
 
 const containerStyle = {
     width: '100%',
@@ -31,56 +32,69 @@ const ClientInfoWindow = ({ client, onClose }) => (
     </InfoWindow>
 );
 
+/**
+ * Componente de mapa de clientes
+ * 
+ * IMPORTANTE: Este componente usa el GoogleMapsProvider para evitar
+ * cargar el script de Google Maps múltiples veces.
+ * 
+ * El script se carga una sola vez a nivel de aplicación, reduciendo
+ * costes y mejorando el rendimiento.
+ */
 const ClientMap = ({ markers }) => {
     const [selectedClient, setSelectedClient] = useState(null);
-    const [apiKey, setApiKey] = useState('');
+    const { isLoaded, loadError } = useGoogleMaps();
 
-    useEffect(() => {
-        const fetchApiKey = async () => {
-            try {
-                const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/api/geocoding/apikey`);
-                setApiKey(response.data.apiKey);
-            } catch (error) {
-                console.error('Error fetching API key:', error);
-            }
-        };
+    // Si hay error al cargar, mostrar mensaje amigable
+    if (loadError) {
+        return (
+            <Alert variant="warning" className="m-3">
+                <Alert.Heading>Mapa no disponible</Alert.Heading>
+                <p>{loadError.userMessage || 'No se pudo cargar el mapa. Inténtalo más tarde.'}</p>
+            </Alert>
+        );
+    }
 
-        fetchApiKey();
-    }, []);
+    // Si aún no está cargado, mostrar loading
+    if (!isLoaded) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={containerStyle}>
+                <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Cargando mapa...</span>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        apiKey && (
-            <LoadScript googleMapsApiKey={apiKey} onLoad={() => console.log('Google Maps API loaded')} onError={(e) => console.error('Error loading Google Maps API', e)}>
-                <GoogleMap
-                    mapContainerStyle={containerStyle}
-                    center={center}
-                    zoom={10}
-                    options={{
-                        disableDefaultUI: true,
-                        zoomControl: true,
-                    }}
-                >
-                    {markers.length === 0 && (
-                        <div className="text-center" style={{ padding: '10px', backgroundColor: 'white' }}>
-                            <p>No hay marcadores disponibles para mostrar.</p>
-                        </div>
-                    )}
-                    {markers.map(marker => (
-                        <ClientMarker
-                            key={marker.id}
-                            marker={marker}
-                            onClick={setSelectedClient}
-                        />
-                    ))}
-                    {selectedClient && (
-                        <ClientInfoWindow
-                            client={selectedClient}
-                            onClose={() => setSelectedClient(null)}
-                        />
-                    )}
-                </GoogleMap>
-            </LoadScript>
-        )
+        <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={markers.length > 0 ? 10 : 8}
+            options={{
+                disableDefaultUI: true,
+                zoomControl: true,
+            }}
+        >
+            {markers.length === 0 && (
+                <div className="text-center" style={{ padding: '10px', backgroundColor: 'white', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                    <p>No hay marcadores disponibles para mostrar.</p>
+                </div>
+            )}
+            {markers.map(marker => (
+                <ClientMarker
+                    key={marker.id}
+                    marker={marker}
+                    onClick={setSelectedClient}
+                />
+            ))}
+            {selectedClient && (
+                <ClientInfoWindow
+                    client={selectedClient}
+                    onClose={() => setSelectedClient(null)}
+                />
+            )}
+        </GoogleMap>
     );
 };
 

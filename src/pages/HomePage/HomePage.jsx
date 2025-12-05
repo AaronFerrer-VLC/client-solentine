@@ -28,8 +28,26 @@ const HomePage = () => {
                 setComercials(comercialsData.data);
                 setSales(salesData.data.sales);
 
+                // Optimización: Si el cliente ya tiene coordenadas guardadas, usarlas
+                // Solo geocodificar si no tiene coordenadas
                 const clientMarkers = await Promise.all(clientsData.data.map(async (client) => {
                     try {
+                        // Si el cliente ya tiene posición guardada, usarla directamente
+                        // Esto evita llamadas innecesarias a la API de Google Maps
+                        if (client.position && client.position.lat && client.position.lng) {
+                            return {
+                                id: client._id,
+                                name: client.name,
+                                address: client.address,
+                                position: {
+                                    lat: client.position.lat,
+                                    lng: client.position.lng
+                                }
+                            };
+                        }
+
+                        // Solo geocodificar si no tiene coordenadas
+                        // El servicio usa cache automáticamente
                         const geocodeResult = await geocodingServices.getCoordinates(client.address);
                         if (
                             geocodeResult &&
@@ -52,7 +70,12 @@ const HomePage = () => {
                             return null;
                         }
                     } catch (error) {
-                        console.error(`Error al procesar el cliente ${client.name}: ${error.message}`);
+                        // Manejar errores de forma amigable sin romper la UI
+                        console.error(`Error al procesar el cliente ${client.name}:`, error.message);
+                        // Si es error de facturación/cuota, mostrar advertencia pero continuar
+                        if (error.code) {
+                            console.warn(`⚠️ Error de Google Maps (${error.code}): ${error.message}`);
+                        }
                         return null;
                     }
                 }));

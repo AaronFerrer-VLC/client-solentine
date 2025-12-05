@@ -109,7 +109,18 @@ const SignupForm = () => {
         setSuccess(null)
 
         try {
-            await authServices.signupUser(signupData)
+            // Solo enviar campos que tienen valor (evitar enviar strings vacíos)
+            const dataToSend = {
+                username: signupData.username.trim(),
+                email: signupData.email.trim(),
+                password: signupData.password,
+                ...(signupData.avatar && { avatar: signupData.avatar }),
+                ...(signupData.firstName?.trim() && { firstName: signupData.firstName.trim() }),
+                ...(signupData.familyName?.trim() && { familyName: signupData.familyName.trim() }),
+                ...(signupData.role && { role: signupData.role }),
+            };
+            
+            await authServices.signupUser(dataToSend)
             setSuccess('Usuario registrado correctamente. Redirigiendo...')
             setTimeout(() => {
                 navigate('/inicio-sesion')

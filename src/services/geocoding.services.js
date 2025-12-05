@@ -18,6 +18,33 @@ class GeocodingService {
             baseURL: `${apiUrl}/api`,
             timeout: 10000 // 10 segundos timeout
         });
+
+        // Interceptor para añadir token de autenticación a todas las peticiones
+        this.axiosApp.interceptors.request.use(
+            (config) => {
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
+            }
+        );
+
+        // Interceptor para manejar errores de autenticación
+        this.axiosApp.interceptors.response.use(
+            (response) => response,
+            (error) => {
+                // Si es 401, el token puede haber expirado
+                if (error.response?.status === 401) {
+                    console.warn('⚠️ Token de autenticación inválido o expirado');
+                    // Opcional: redirigir al login o refrescar el token
+                }
+                return Promise.reject(error);
+            }
+        );
     }
 
     /**

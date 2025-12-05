@@ -58,6 +58,7 @@ export const GoogleMapsProvider = ({ children }) => {
       onLoad={handleLoad}
       onError={handleError}
       loadingElement={<div>Cargando mapas...</div>}
+      libraries={['places']}
     >
       <GoogleMapsContext.Provider value={{ isLoaded, loadError }}>
         {loadError && (

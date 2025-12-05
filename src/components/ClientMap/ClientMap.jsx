@@ -70,6 +70,9 @@ const ClientMap = ({ markers }) => {
     const [selectedClient, setSelectedClient] = useState(null);
     const { isLoaded, loadError } = useGoogleMaps();
 
+    // Asegurar que markers siempre sea un array
+    const safeMarkers = Array.isArray(markers) ? markers : [];
+
     // Si hay error al cargar, mostrar mensaje amigable
     if (loadError) {
         return (
@@ -95,24 +98,27 @@ const ClientMap = ({ markers }) => {
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
-            zoom={markers.length > 0 ? 10 : 8}
+            zoom={safeMarkers.length > 0 ? 10 : 8}
             options={{
                 disableDefaultUI: true,
                 zoomControl: true,
             }}
         >
-            {markers.length === 0 && (
+            {safeMarkers.length === 0 && (
                 <div className="text-center" style={{ padding: '10px', backgroundColor: 'white', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
                     <p>No hay marcadores disponibles para mostrar.</p>
                 </div>
             )}
-            {markers.map(marker => (
-                <ClientMarker
-                    key={marker.id}
-                    marker={marker}
-                    onClick={setSelectedClient}
-                />
-            ))}
+            {safeMarkers.map(marker => {
+                if (!marker || !marker.id || !marker.position) return null;
+                return (
+                    <ClientMarker
+                        key={marker.id}
+                        marker={marker}
+                        onClick={setSelectedClient}
+                    />
+                );
+            })}
             {selectedClient && (
                 <ClientInfoWindow
                     client={selectedClient}
@@ -134,7 +140,7 @@ ClientMap.propTypes = {
                 lng: PropTypes.number.isRequired,
             }).isRequired,
         })
-    ).isRequired,
+    ),
 };
 
 export default ClientMap;

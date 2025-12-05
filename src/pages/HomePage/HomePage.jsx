@@ -199,7 +199,7 @@ const HomePage = () => {
                 <Row className="mb-4">
                     <Col>
                         <h2 className="text-center">Mapa de Zonas y Clientes</h2>
-                        <ClientMap markers={markers} />
+                        <ClientMap markers={Array.isArray(markers) ? markers : []} />
                     </Col>
                 </Row>
             </Container>

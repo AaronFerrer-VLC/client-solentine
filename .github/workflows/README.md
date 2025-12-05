@@ -32,6 +32,7 @@ Este directorio contiene los workflows de CI/CD para el cliente de Solentine.
 - `NETLIFY_SITE_ID` - ID de tu sitio en Netlify
 - `NETLIFY_AUTH_TOKEN` - Token de autenticación de Netlify
 - `VITE_APP_API_URL` (opcional) - URL del servidor backend
+- `VITE_GOOGLE_MAPS_API_KEY` (opcional) - API key de Google Maps para el cliente
 
 ---
 
@@ -51,6 +52,9 @@ En GitHub:
    - `NETLIFY_AUTH_TOKEN`: El token que creaste
    - `NETLIFY_SITE_ID`: El Site ID de tu sitio
    - `VITE_APP_API_URL`: `https://server-solentine.fly.dev` (opcional)
+   - `VITE_GOOGLE_MAPS_API_KEY`: Tu API key de Google Maps (opcional)
+
+**Nota**: También puedes configurar estas variables directamente en Netlify Dashboard (recomendado). Ver [NETLIFY_ENV_SETUP.md](../NETLIFY_ENV_SETUP.md) para más detalles.
 
 ---
 

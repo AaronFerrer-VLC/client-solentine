@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Alert } from 'react-bootstrap';
 import { CheckCircle } from 'react-bootstrap-icons';
 
@@ -16,6 +16,12 @@ const SuccessAlert = ({ message, onClose, dismissible = true }) => {
       <span>{message}</span>
     </Alert>
   );
+};
+
+SuccessAlert.propTypes = {
+    message: PropTypes.string,
+    onClose: PropTypes.func,
+    dismissible: PropTypes.bool,
 };
 
 export default SuccessAlert;

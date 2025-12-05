@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Form, Button } from 'react-bootstrap'
 import comercialServices from '../../../services/comercial.services'
 
@@ -58,4 +59,16 @@ const EditComercialForm = ({ comercial, onComercialSaved, onClose }) => {
         </div>
     )
 }
+
+EditComercialForm.propTypes = {
+    comercial: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        email: PropTypes.string,
+        phone: PropTypes.string,
+    }).isRequired,
+    onComercialSaved: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+}
+
 export default EditComercialForm

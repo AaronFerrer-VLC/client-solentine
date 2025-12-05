@@ -1,10 +1,10 @@
 import "./UserCard.css"
-
+import PropTypes from 'prop-types'
 import { Card, Row, Col, Container } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { homer } from "../../../const/image-paths"
 
-const UserCard = ({ avatar, username, _id }) => {
+const UserCard = ({ avatar, username, _id, bio }) => {
 
     return (
         <div className="UserCard">
@@ -17,7 +17,7 @@ const UserCard = ({ avatar, username, _id }) => {
                             </Col>
                             <Col className="p-0" xs={{ span: 8 }} lg={{ span: 8 }}>
                                 <span className="m-0 p-0 fw-bold">{username}</span>
-                                <p className="m-0 p-0">{bio}</p>
+                                {bio && <p className="m-0 p-0">{bio}</p>}
                             </Col>
                             <Col className="p-0 text-decoration-none text-white fw-bold d-flex justify-content-center" xs={{ span: 2 }} lg={{ span: 2 }} as={Link} to={`/usuarios/${_id}`}>
                                 <span>Ver</span>
@@ -28,6 +28,13 @@ const UserCard = ({ avatar, username, _id }) => {
             </Card>
         </div>
     )
+}
+
+UserCard.propTypes = {
+    avatar: PropTypes.string,
+    username: PropTypes.string,
+    _id: PropTypes.string.isRequired,
+    bio: PropTypes.string,
 }
 
 export default UserCard

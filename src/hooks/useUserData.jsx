@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import userServices from '../services/user.services';
-import { useParams } from 'react-router-dom';
 
 const useUserData = (userId, loggedUser) => {
     const [data, setData] = useState(null);
@@ -23,7 +22,7 @@ const useUserData = (userId, loggedUser) => {
                     setData(userData);
                     setLoading(false);
                 })
-                .catch((err) => {
+                .catch(() => {
                     setError('Error fetching user data');
                     setLoading(false);
                 });

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import saleServices from '../../../services/sale.services'
 import zoneServices from '../../../services/zone.services';
@@ -20,9 +21,6 @@ const CreateSaleForm = ({ onSaleSaved, onClose }) => {
         Importe: "",
         Comercial: ""
     });
-
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
     const [zones, setZones] = useState([]);
     const [brands, setBrands] = useState([]);
     const [clients, setClients] = useState([]);
@@ -64,10 +62,6 @@ const CreateSaleForm = ({ onSaleSaved, onClose }) => {
 
     return (
         <div className='CreateSaleForm'>
-
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {success && <p style={{ color: "green" }}>{success}</p>}
-
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="Id">
                     <Form.Label>Id</Form.Label>
@@ -227,6 +221,11 @@ const CreateSaleForm = ({ onSaleSaved, onClose }) => {
             </Form>
         </div>
     );
+};
+
+CreateSaleForm.propTypes = {
+    onSaleSaved: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
 };
 
 export default CreateSaleForm;

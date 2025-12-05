@@ -75,7 +75,7 @@ export const detectGoogleMapsError = (error) => {
   const errorCode = error.code || error.status || '';
 
   // Buscar código de error en el mensaje
-  for (const [code, codeValue] of Object.entries(GOOGLE_MAPS_ERROR_CODES)) {
+  for (const [, codeValue] of Object.entries(GOOGLE_MAPS_ERROR_CODES)) {
     if (
       errorString.includes(codeValue) ||
       errorMessage.includes(codeValue) ||
@@ -88,7 +88,7 @@ export const detectGoogleMapsError = (error) => {
   // Buscar en response.data si existe
   if (error.response?.data?.error_message) {
     const errorMsg = error.response.data.error_message;
-    for (const [code, codeValue] of Object.entries(GOOGLE_MAPS_ERROR_CODES)) {
+    for (const [, codeValue] of Object.entries(GOOGLE_MAPS_ERROR_CODES)) {
       if (errorMsg.includes(codeValue)) {
         return codeValue;
       }

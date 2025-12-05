@@ -14,9 +14,7 @@ const Navigation = () => {
     const [clickToggle, setClickToggle] = useState(false);
     const [showOffCanvas, setShowOffCanvas] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
-    const [expanded, setExpanded] = useState(false);
-
-    const toggleSearchFilter = () => setShowFilter(prevState => !prevState);
+    const [expanded] = useState(false);
 
     return (
         <div className="Navigation">

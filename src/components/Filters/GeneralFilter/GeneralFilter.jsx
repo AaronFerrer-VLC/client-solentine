@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Form, Row, Col, Spinner } from 'react-bootstrap';
 import saleServices from '../../../services/sale.services';
 import userServices from '../../../services/user.services';
@@ -9,20 +10,7 @@ const GeneralFilter = ({ onResultClick }) => {
     const [results, setResults] = useState([]);
     const [highlightedResult, setHighlightedResult] = useState(null);
 
-    useEffect(() => {
-        if (searchValue) {
-            handleSearch();
-        } else {
-            setResults([]);
-            setHighlightedResult(null);
-        }
-    }, [searchValue]);
-
-    const handleSearchChange = (e) => {
-        setSearchValue(e.target.value);
-    };
-
-    const handleSearch = async () => {
+    const handleSearch = useCallback(async () => {
         setIsLoading(true);
         try {
             const [salesResponse, usersResponse] = await Promise.all([
@@ -46,6 +34,19 @@ const GeneralFilter = ({ onResultClick }) => {
         } finally {
             setIsLoading(false);
         }
+    }, [searchValue]);
+
+    useEffect(() => {
+        if (searchValue) {
+            handleSearch();
+        } else {
+            setResults([]);
+            setHighlightedResult(null);
+        }
+    }, [searchValue, handleSearch]);
+
+    const handleSearchChange = (e) => {
+        setSearchValue(e.target.value);
     };
 
     const handleClick = (type, id) => {
@@ -129,6 +130,10 @@ const GeneralFilter = ({ onResultClick }) => {
             )}
         </div>
     )
+}
+
+GeneralFilter.propTypes = {
+    onResultClick: PropTypes.func.isRequired,
 }
 
 export default GeneralFilter

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { Form, Button, Alert } from 'react-bootstrap'
 import userServices from '../../../services/user.services'
 import rolesServices from '../../../services/roles.services'
@@ -17,7 +18,7 @@ const EditFormUser = ({ userData, onClose }) => {
     useEffect(() => {
         rolesServices.getRoles()
             .then(response => setRoles(response.data))
-            .catch(err => setError('Error fetching roles.'))
+            .catch(() => setError('Error fetching roles.'))
     }, [])
 
     const handleChange = (e) => {
@@ -46,7 +47,7 @@ const EditFormUser = ({ userData, onClose }) => {
                 setError(null);
                 onClose();
             })
-            .catch((err) => {
+            .catch(() => {
                 setError('Error actualizando el perfil.');
                 setSuccess(null);
             });
@@ -105,6 +106,17 @@ const EditFormUser = ({ userData, onClose }) => {
             </Button>
         </Form>
     );
+};
+
+EditFormUser.propTypes = {
+    userData: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        username: PropTypes.string,
+        email: PropTypes.string,
+        role: PropTypes.string,
+        avatar: PropTypes.string,
+    }).isRequired,
+    onClose: PropTypes.func.isRequired,
 };
 
 export default EditFormUser;

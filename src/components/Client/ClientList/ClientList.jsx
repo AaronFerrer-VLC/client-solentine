@@ -1,4 +1,4 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import ClientCard from '../ClientCard/ClientCard'
 
 import './ClientList.css'
@@ -17,4 +17,18 @@ const ClientList = ({ clients, onEditClick, onDeleteClick }) => {
         </div>
     )
 }
+
+ClientList.propTypes = {
+    clients: PropTypes.arrayOf(
+        PropTypes.shape({
+            _id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            email: PropTypes.string,
+            address: PropTypes.string,
+        })
+    ).isRequired,
+    onEditClick: PropTypes.func.isRequired,
+    onDeleteClick: PropTypes.func.isRequired,
+}
+
 export default ClientList

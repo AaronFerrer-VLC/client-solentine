@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -29,6 +29,18 @@ const ChartsSalesByYear = ({ data, filter }) => {
     };
 
     return <Bar data={chartData} />;
+};
+
+ChartsSalesByYear.propTypes = {
+    data: PropTypes.arrayOf(
+        PropTypes.shape({
+            year: PropTypes.number,
+            month: PropTypes.number,
+            date: PropTypes.string,
+            sales: PropTypes.number,
+        })
+    ).isRequired,
+    filter: PropTypes.oneOf(['year', 'month', 'date']).isRequired,
 };
 
 export default ChartsSalesByYear;

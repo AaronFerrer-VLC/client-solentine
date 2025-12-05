@@ -1,7 +1,8 @@
 import ProfileUserCard from '../ProfileUserCard/ProfileUserCard'
+import PropTypes from 'prop-types'
 import { Row, Col } from 'react-bootstrap'
 
-const ProfileUserList = ({ users, oneUserClick }) => {
+const ProfileUserList = ({ users }) => {
 
     return (
         <div className="ReviewsList">
@@ -19,6 +20,18 @@ const ProfileUserList = ({ users, oneUserClick }) => {
             </Row>
         </div>
     )
+}
+
+ProfileUserList.propTypes = {
+    users: PropTypes.arrayOf(
+        PropTypes.shape({
+            _id: PropTypes.string.isRequired,
+            avatar: PropTypes.string,
+            username: PropTypes.string,
+            role: PropTypes.string,
+            email: PropTypes.string,
+        })
+    ).isRequired,
 }
 
 export default ProfileUserList

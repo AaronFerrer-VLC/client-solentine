@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import { LoadScript } from '@react-google-maps/api';
 import { logGoogleMapsError, getUserFriendlyMessage } from '../utils/googleMapsErrors';
 
@@ -84,6 +85,10 @@ export const useGoogleMaps = () => {
     throw new Error('useGoogleMaps debe usarse dentro de GoogleMapsProvider');
   }
   return context;
+};
+
+GoogleMapsProvider.propTypes = {
+    children: PropTypes.node.isRequired,
 };
 
 export default GoogleMapsContext;

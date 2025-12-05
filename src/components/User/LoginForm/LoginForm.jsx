@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { Form, Button, Alert } from "react-bootstrap"
+import { Form, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../../../contexts/auth.context"
 import authServices from "../../../services/auth.services"
@@ -60,7 +60,7 @@ const LoginForm = () => {
         try {
             const { data } = await authServices.loginUser(loginData)
             
-            const { authToken, userId, user } = data
+            const { authToken, userId } = data
 
             localStorage.setItem('authToken', authToken)
             if (userId) {

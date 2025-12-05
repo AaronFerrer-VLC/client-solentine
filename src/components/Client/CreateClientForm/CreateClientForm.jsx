@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Form, Button } from 'react-bootstrap'
 import clientServices from '../../../services/client.services'
 
@@ -58,4 +59,10 @@ const CreateClientForm = ({ onClientSaved, onClose }) => {
         </div>
     )
 }
+
+CreateClientForm.propTypes = {
+    onClientSaved: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+}
+
 export default CreateClientForm

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Form, Button } from 'react-bootstrap'
 import comercialServices from '../../../services/comercial.services'
 
@@ -57,6 +58,11 @@ const CreateComercialForm = ({ onComercialSaved, onClose }) => {
             </Form>
         </div>
     )
+}
+
+CreateComercialForm.propTypes = {
+    onComercialSaved: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
 }
 
 export default CreateComercialForm

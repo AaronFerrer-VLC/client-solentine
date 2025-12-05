@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import PropTypes from "prop-types"
 import { Button, Form } from "react-bootstrap"
 import saleServices from "../../../services/sale.services"
 import brandServices from "../../../services/brand.services"
@@ -8,7 +9,7 @@ import zoneServices from "../../../services/zone.services"
 import Loader from "../../Loader/Loader"
 
 const EditSaleForm = ({ sale, onSaleSaved, onClose }) => {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading] = useState(false)
     const [formData, setFormData] = useState({
         Id: sale.Id,
         Día: sale.Día,
@@ -22,9 +23,7 @@ const EditSaleForm = ({ sale, onSaleSaved, onClose }) => {
         Importe: sale.Importe,
         Comercial: sale.Comercial?._id || ""
     })
-    const [error, setError] = useState("")
-    const [success, setSuccess] = useState("")
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSubmitting] = useState(false)
     const [zones, setZones] = useState([]);
     const [brands, setBrands] = useState([]);
     const [clients, setClients] = useState([]);
@@ -68,9 +67,6 @@ const EditSaleForm = ({ sale, onSaleSaved, onClose }) => {
     return (
         isLoading ? <Loader /> :
             <div className="EditSaleForm">
-                {error && <p style={{ color: "red" }}>{error}</p>}
-                {success && <p style={{ color: "green" }}>{success}</p>}
-
                 <Form onSubmit={handleSubmit}>
 
                     <Form.Group controlId="Id">
@@ -228,6 +224,33 @@ const EditSaleForm = ({ sale, onSaleSaved, onClose }) => {
                 </Form>
             </div>
     )
+}
+
+EditSaleForm.propTypes = {
+    sale: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        Id: PropTypes.string,
+        Día: PropTypes.string,
+        Mes: PropTypes.string,
+        Año: PropTypes.string,
+        Fecha: PropTypes.string,
+        Negocio: PropTypes.string,
+        Zona: PropTypes.shape({
+            _id: PropTypes.string,
+        }),
+        Marca: PropTypes.shape({
+            _id: PropTypes.string,
+        }),
+        Cliente: PropTypes.shape({
+            _id: PropTypes.string,
+        }),
+        Importe: PropTypes.string,
+        Comercial: PropTypes.shape({
+            _id: PropTypes.string,
+        }),
+    }).isRequired,
+    onSaleSaved: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
 }
 
 export default EditSaleForm

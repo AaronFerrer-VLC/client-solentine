@@ -1,4 +1,4 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import { Card, Button } from 'react-bootstrap'
 
 const CardComercial = ({ comercial, onEditClick, onDeleteClick }) => {
@@ -13,6 +13,17 @@ const CardComercial = ({ comercial, onEditClick, onDeleteClick }) => {
             </Card.Body>
         </Card>
     )
+}
+
+CardComercial.propTypes = {
+    comercial: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        email: PropTypes.string,
+        phone: PropTypes.string,
+    }).isRequired,
+    onEditClick: PropTypes.func.isRequired,
+    onDeleteClick: PropTypes.func.isRequired,
 }
 
 export default CardComercial

@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Alert } from 'react-bootstrap';
 import { XCircle } from 'react-bootstrap-icons';
 
@@ -16,6 +16,12 @@ const ErrorAlert = ({ message, onClose, dismissible = true }) => {
       <span>{message}</span>
     </Alert>
   );
+};
+
+ErrorAlert.propTypes = {
+    message: PropTypes.string,
+    onClose: PropTypes.func,
+    dismissible: PropTypes.bool,
 };
 
 export default ErrorAlert;

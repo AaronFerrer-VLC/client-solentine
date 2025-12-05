@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Form, Button } from 'react-bootstrap'
 import clientServices from '../../../services/client.services'
 
@@ -58,4 +59,16 @@ const EditClientForm = ({ client, onClientSaved, onClose }) => {
         </div>
     )
 }
+
+EditClientForm.propTypes = {
+    client: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        email: PropTypes.string,
+        address: PropTypes.string,
+    }).isRequired,
+    onClientSaved: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+}
+
 export default EditClientForm

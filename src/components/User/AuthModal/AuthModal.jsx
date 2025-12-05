@@ -1,4 +1,4 @@
-import React from "react"
+import PropTypes from 'prop-types'
 import { Modal, Button, Row, Col } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
@@ -45,6 +45,11 @@ const AuthModal = ({ show, onHide }) => {
             </Modal.Body>
         </Modal>
     )
+}
+
+AuthModal.propTypes = {
+    show: PropTypes.bool.isRequired,
+    onHide: PropTypes.func.isRequired,
 }
 
 export default AuthModal

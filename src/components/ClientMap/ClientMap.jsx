@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { GoogleMap, Marker, InfoWindow } from '@react-google-maps/api';
 import { useGoogleMaps } from '../../contexts/GoogleMapsContext';
 import { Alert } from 'react-bootstrap';
@@ -20,6 +21,17 @@ const ClientMarker = ({ marker, onClick }) => (
     />
 );
 
+ClientMarker.propTypes = {
+    marker: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        position: PropTypes.shape({
+            lat: PropTypes.number.isRequired,
+            lng: PropTypes.number.isRequired,
+        }).isRequired,
+    }).isRequired,
+    onClick: PropTypes.func.isRequired,
+};
+
 const ClientInfoWindow = ({ client, onClose }) => (
     <InfoWindow
         position={client.position}
@@ -31,6 +43,19 @@ const ClientInfoWindow = ({ client, onClose }) => (
         </div>
     </InfoWindow>
 );
+
+ClientInfoWindow.propTypes = {
+    client: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        address: PropTypes.string,
+        position: PropTypes.shape({
+            lat: PropTypes.number.isRequired,
+            lng: PropTypes.number.isRequired,
+        }).isRequired,
+    }).isRequired,
+    onClose: PropTypes.func.isRequired,
+};
 
 /**
  * Componente de mapa de clientes
@@ -96,6 +121,20 @@ const ClientMap = ({ markers }) => {
             )}
         </GoogleMap>
     );
+};
+
+ClientMap.propTypes = {
+    markers: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            address: PropTypes.string,
+            position: PropTypes.shape({
+                lat: PropTypes.number.isRequired,
+                lng: PropTypes.number.isRequired,
+            }).isRequired,
+        })
+    ).isRequired,
 };
 
 export default ClientMap;

@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Table, Button, Spinner } from 'react-bootstrap'
 import Loader from '../../Loader/Loader'
 
 import './TableSales.css'
 
 const TableSales = ({ sales, onSortChange, onEditClick, onDeleteClick }) => {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading] = useState(false)
     const [isSorting, setIsSorting] = useState(false)
 
     const handleSort = async (key, direction) => {
@@ -72,6 +73,33 @@ const TableSales = ({ sales, onSortChange, onEditClick, onDeleteClick }) => {
                 </Table>
             </div>
     )
+}
+
+TableSales.propTypes = {
+    sales: PropTypes.arrayOf(
+        PropTypes.shape({
+            _id: PropTypes.string.isRequired,
+            Id: PropTypes.string,
+            Fecha: PropTypes.string,
+            Negocio: PropTypes.string,
+            Zona: PropTypes.shape({
+                name: PropTypes.string,
+            }),
+            Marca: PropTypes.shape({
+                name: PropTypes.string,
+            }),
+            Cliente: PropTypes.shape({
+                name: PropTypes.string,
+            }),
+            Importe: PropTypes.string,
+            Comercial: PropTypes.shape({
+                name: PropTypes.string,
+            }),
+        })
+    ).isRequired,
+    onSortChange: PropTypes.func.isRequired,
+    onEditClick: PropTypes.func.isRequired,
+    onDeleteClick: PropTypes.func.isRequired,
 }
 
 export default TableSales

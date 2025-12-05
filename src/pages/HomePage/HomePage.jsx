@@ -26,17 +26,22 @@ const HomePage = () => {
                     saleServices.getAllSalesForHomePage()
                 ]);
 
-                setClients(clientsData.data);
-                setComercials(comercialsData.data);
-                setSales(salesData.data.sales);
+                // Validar y establecer valores por defecto para evitar errores
+                const clientsArray = Array.isArray(clientsData?.data) ? clientsData.data : [];
+                const comercialsArray = Array.isArray(comercialsData?.data) ? comercialsData.data : [];
+                const salesArray = Array.isArray(salesData?.data?.sales) ? salesData.data.sales : [];
+
+                setClients(clientsArray);
+                setComercials(comercialsArray);
+                setSales(salesArray);
 
                 // Verificar que el usuario esté autenticado antes de geocodificar
                 const token = localStorage.getItem('authToken');
                 if (!token || !loggedUser) {
                     console.warn('⚠️ Usuario no autenticado, omitiendo geocodificación');
                     // Crear marcadores solo con coordenadas existentes
-                    const clientMarkers = clientsData.data
-                        .filter(client => client.position && client.position.lat && client.position.lng)
+                    const clientMarkers = clientsArray
+                        .filter(client => client && client.position && client.position.lat && client.position.lng)
                         .map(client => ({
                             id: client._id,
                             name: client.name,

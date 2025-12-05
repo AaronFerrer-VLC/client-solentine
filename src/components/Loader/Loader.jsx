@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { Spinner } from "react-bootstrap"
 import './Loader.css'
 
@@ -14,6 +15,12 @@ const Loader = ({ size = 'md', text = null, fullScreen = false }) => {
     );
 
     return content;
+}
+
+Loader.propTypes = {
+    size: PropTypes.oneOf(['sm', 'md', 'lg']),
+    text: PropTypes.string,
+    fullScreen: PropTypes.bool,
 }
 
 export default Loader

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import PropTypes from 'prop-types'
 import './ProfileUserCard.css'
 import { Row, Col, Card, Container } from 'react-bootstrap'
 import { homer } from "../../../const/image-path"
@@ -30,6 +31,14 @@ const ProfileUserCard = ({ _id, avatar, username, role, email }) => {
             </Container>
         </div>
     )
+}
+
+ProfileUserCard.propTypes = {
+    _id: PropTypes.string.isRequired,
+    avatar: PropTypes.string,
+    username: PropTypes.string,
+    role: PropTypes.string,
+    email: PropTypes.string,
 }
 
 export default ProfileUserCard

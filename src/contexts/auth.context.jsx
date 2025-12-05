@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState, useCallback } from "react";
+import PropTypes from "prop-types";
 import authServices from "../services/auth.services";
 import { handleApiError } from "../utils/errorHandler";
 
@@ -79,5 +80,9 @@ function AuthProviderWrapper(props) {
         </AuthContext.Provider>
     );
 }
+
+AuthProviderWrapper.propTypes = {
+    children: PropTypes.node.isRequired,
+};
 
 export { AuthContext, AuthProviderWrapper };

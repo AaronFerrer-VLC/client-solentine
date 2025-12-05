@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
-import Loader from '../../Loader/Loader';
 
 const FiltersSale = ({ onChange, onClear }) => {
-    const [isLoading, setIsLoading] = useState(false)
     const [filters, setFilters] = useState({
         id: '',
         year: '',
@@ -41,8 +40,7 @@ const FiltersSale = ({ onChange, onClear }) => {
     };
 
     return (
-        isLoading ? <Loader /> :
-            <div className='FiltersSale'>
+        <div className='FiltersSale'>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formId">
                         <Form.Label>ID</Form.Label>
@@ -81,6 +79,11 @@ const FiltersSale = ({ onChange, onClear }) => {
                 </Form>
             </div>
     );
+};
+
+FiltersSale.propTypes = {
+    onChange: PropTypes.func.isRequired,
+    onClear: PropTypes.func.isRequired,
 };
 
 export default FiltersSale;

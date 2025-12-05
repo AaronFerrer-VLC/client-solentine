@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import authServices from '../../../services/auth.services'
@@ -247,11 +247,10 @@ const SignupForm = () => {
 
             <div className="d-grid">
                 <Button 
-                    className='mt-2' 
+                    className="btn-style-2 mt-2" 
                     variant="primary" 
                     type="submit"
                     disabled={isLoading || isUploading}
-                    className="btn-style-2"
                 >
                     {isLoading ? 'Registrando...' : 'Registrarse'}
                 </Button>

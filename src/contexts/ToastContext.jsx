@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Toast } from 'react-bootstrap';
 import { CheckCircle, XCircle, InfoCircle, ExclamationTriangle } from 'react-bootstrap-icons';
 
@@ -181,6 +182,10 @@ export const useToast = () => {
     throw new Error('useToast must be used within a ToastProvider');
   }
   return context;
+};
+
+ToastProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default ToastContext;

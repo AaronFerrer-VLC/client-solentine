@@ -30,7 +30,7 @@ export function initSentry() {
         tracesSampleRate: import.meta.env.MODE === 'production' ? 0.1 : 1.0,
         replaysSessionSampleRate: 0.1,
         replaysOnErrorSampleRate: 1.0,
-        beforeSend(event, hint) {
+        beforeSend(event) {
             // Filtrar información sensible
             if (event.request) {
                 if (event.request.data) {

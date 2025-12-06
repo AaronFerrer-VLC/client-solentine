@@ -126,8 +126,13 @@ const SignupForm = () => {
                 navigate('/inicio-sesion')
             }, 1500)
         } catch (err) {
+            console.log('Signup error:', err);
+            console.log('Error response:', err.response);
+            console.log('Error data:', err.response?.data);
+            
             // Handle validation errors with field-specific messages
             if (err.response?.status === 400 && err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+                console.log('Processing validation errors:', err.response.data.errors);
                 // Set field-specific errors
                 const fieldErrors = {};
                 err.response.data.errors.forEach(error => {
@@ -135,6 +140,7 @@ const SignupForm = () => {
                         fieldErrors[error.field] = error.message;
                     }
                 });
+                console.log('Field errors:', fieldErrors);
                 setErrors(fieldErrors);
                 
                 // Set general error message if there are non-field errors
@@ -146,6 +152,7 @@ const SignupForm = () => {
                 }
             } else {
                 // Handle other errors
+                console.log('Not a validation error, using handleApiError');
                 const errorMessage = handleApiError(err, 'Error al registrar usuario');
                 setError(errorMessage);
             }

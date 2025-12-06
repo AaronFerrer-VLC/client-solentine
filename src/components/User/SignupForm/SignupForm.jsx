@@ -126,8 +126,29 @@ const SignupForm = () => {
                 navigate('/inicio-sesion')
             }, 1500)
         } catch (err) {
-            const errorMessage = handleApiError(err, 'Error al registrar usuario')
-            setError(errorMessage)
+            // Handle validation errors with field-specific messages
+            if (err.response?.status === 400 && err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+                // Set field-specific errors
+                const fieldErrors = {};
+                err.response.data.errors.forEach(error => {
+                    if (error.field) {
+                        fieldErrors[error.field] = error.message;
+                    }
+                });
+                setErrors(fieldErrors);
+                
+                // Set general error message if there are non-field errors
+                const generalErrors = err.response.data.errors.filter(e => !e.field);
+                if (generalErrors.length > 0) {
+                    setError(generalErrors.map(e => e.message).join(', '));
+                } else {
+                    setError('Por favor, corrige los errores en el formulario');
+                }
+            } else {
+                // Handle other errors
+                const errorMessage = handleApiError(err, 'Error al registrar usuario');
+                setError(errorMessage);
+            }
         } finally {
             setIsLoading(false)
         }

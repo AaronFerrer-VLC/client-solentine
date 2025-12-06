@@ -1,19 +1,19 @@
-import { useState } from 'react'
+import { useState, useCallback, memo } from 'react'
 import PropTypes from 'prop-types'
 import { Table, Button, Spinner } from 'react-bootstrap'
 import Loader from '../../Loader/Loader'
 
 import './TableSales.css'
 
-const TableSales = ({ sales, onSortChange, onEditClick, onDeleteClick }) => {
+const TableSales = memo(({ sales, onSortChange, onEditClick, onDeleteClick }) => {
     const [isLoading] = useState(false)
     const [isSorting, setIsSorting] = useState(false)
 
-    const handleSort = async (key, direction) => {
+    const handleSort = useCallback(async (key, direction) => {
         setIsSorting(true);
         await onSortChange(key, direction)
         setIsSorting(false)
-    }
+    }, [onSortChange])
 
     return (
         isLoading ? <Loader /> :
@@ -73,7 +73,9 @@ const TableSales = ({ sales, onSortChange, onEditClick, onDeleteClick }) => {
                 </Table>
             </div>
     )
-}
+});
+
+TableSales.displayName = 'TableSales';
 
 TableSales.propTypes = {
     sales: PropTypes.arrayOf(
@@ -100,6 +102,6 @@ TableSales.propTypes = {
     onSortChange: PropTypes.func.isRequired,
     onEditClick: PropTypes.func.isRequired,
     onDeleteClick: PropTypes.func.isRequired,
-}
+};
 
 export default TableSales

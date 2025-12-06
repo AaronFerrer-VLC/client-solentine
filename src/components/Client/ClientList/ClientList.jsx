@@ -1,9 +1,10 @@
+import { memo } from 'react'
 import PropTypes from 'prop-types'
 import ClientCard from '../ClientCard/ClientCard'
 
 import './ClientList.css'
 
-const ClientList = ({ clients, onEditClick, onDeleteClick }) => {
+const ClientList = memo(({ clients, onEditClick, onDeleteClick }) => {
     return (
         <div className="ListClient">
             {clients.map(client => (
@@ -16,7 +17,9 @@ const ClientList = ({ clients, onEditClick, onDeleteClick }) => {
             ))}
         </div>
     )
-}
+});
+
+ClientList.displayName = 'ClientList';
 
 ClientList.propTypes = {
     clients: PropTypes.arrayOf(

@@ -1,6 +1,7 @@
 /**
  * Centralized Error Handling Utilities
  */
+import { captureException } from '../config/sentry';
 
 /**
  * Extract error message from error object
@@ -42,6 +43,15 @@ export const getErrorMessage = (error) => {
  */
 export const handleApiError = (error, defaultMessage = 'Something went wrong') => {
   if (!error) return defaultMessage;
+
+  // Capture error in Sentry (only non-operational errors)
+  if (error.response?.status >= 500) {
+    captureException(error, {
+      type: 'api_error',
+      status: error.response?.status,
+      url: error.config?.url
+    });
+  }
 
   // Axios error
   if (error.response) {
@@ -95,20 +105,42 @@ export const handleApiError = (error, defaultMessage = 'Something went wrong') =
 };
 
 /**
- * Show error notification (can be integrated with toast library)
+ * Show error notification using toast system
+ * @param {Error|string} error - Error object or error message
+ * @param {string|null} customMessage - Custom error message to display
+ * @param {Function|null} toastCallback - Optional toast callback function (from useToast hook)
+ * @returns {string} The error message
  */
-export const showError = (error, customMessage = null) => {
+export const showError = (error, customMessage = null, toastCallback = null) => {
   const message = customMessage || getErrorMessage(error);
-  // TODO: Integrate with toast notification library
-  alert(message); // Temporary - replace with proper toast
+  
+  if (toastCallback && typeof toastCallback.showError === 'function') {
+    // Use toast notification if callback is provided
+    toastCallback.showError(message);
+  } else {
+    // Fallback to console.error in development, silent in production
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error:', message);
+    }
+  }
+  
   return message;
 };
 
 /**
- * Show success notification
+ * Show success notification using toast system
+ * @param {string} message - Success message to display
+ * @param {Function|null} toastCallback - Optional toast callback function (from useToast hook)
  */
-export const showSuccess = (message) => {
-  // TODO: Integrate with toast notification library
-  alert(message); // Temporary - replace with proper toast
+export const showSuccess = (message, toastCallback = null) => {
+  if (toastCallback && typeof toastCallback.showSuccess === 'function') {
+    // Use toast notification if callback is provided
+    toastCallback.showSuccess(message);
+  } else {
+    // Fallback to console.log in development, silent in production
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Success:', message);
+    }
+  }
 };
 

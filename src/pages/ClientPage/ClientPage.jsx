@@ -4,6 +4,8 @@ import clientServices from '../../services/client.services';
 import ListClient from '../../components/Client/ClientList/ClientList';
 import CreateClientForm from '../../components/Client/CreateClientForm/CreateClientForm';
 import EditClientForm from '../../components/Client/EditClientForm/EditClientForm'
+import { useToast } from '../../contexts/ToastContext';
+import { handleApiError } from '../../utils/errorHandler';
 
 import './ClientPage.css';
 import Loader from '../../components/Loader/Loader';
@@ -12,6 +14,7 @@ const ClientPage = () => {
     const [clients, setClients] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [modalState, setModalState] = useState({ type: null, client: null });
+    const toast = useToast();
 
     useEffect(() => {
         fetchClients();
@@ -23,7 +26,8 @@ const ClientPage = () => {
             const { data } = await clientServices.getAllClients();
             setClients(data);
         } catch (error) {
-            console.error('Error al cargar los clientes:', error);
+            const errorMessage = handleApiError(error, 'Error al cargar los clientes');
+            toast.showError(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -36,9 +40,11 @@ const ClientPage = () => {
     const handleDeleteClient = async (client) => {
         try {
             await clientServices.deleteClient(client._id);
+            toast.showSuccess('Cliente eliminado correctamente');
             fetchClients();
         } catch (error) {
-            console.error('Error al eliminar el cliente:', error);
+            const errorMessage = handleApiError(error, 'Error al eliminar el cliente');
+            toast.showError(errorMessage);
         }
     };
 
